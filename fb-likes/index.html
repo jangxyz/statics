@@ -14,7 +14,7 @@
 <style>
 
 body {
-    margin: 0 0 30px 0;
+    margin: 0 0 100px 0;
     padding: 0;
 }
 
@@ -62,12 +62,16 @@ table.result-data tr.post-message.folded {
     주의: 당신의 데이터는 아무렇게나 쓰일 수 있습니다.
 </p>
 
+<div class='checking-login-status'>
+    로그인 확인 중...
+</div>
+
 <ul id="actions">
     <li class='login auth-action'>
         페이스북에 <a href="" class='login'>로그인</a>하세여
     </li>
     <li class='logout auth-action'>
-        <a href="#" onclick="logoutFacebook();return false;">logout</a>
+        페이스북에서 <a href="#" onclick="logoutFacebook();return false;">로그아웃</a>
     </li>
     <!--
     <li> 
@@ -173,7 +177,7 @@ table.result-data tr.post-message.folded {
 
                 #
                 [result0,result1,result2,result3] = (r.fql_result_set for r in response[0..3])
-                $a.text( $.text() + " (#{result0.length}})" )
+                $a.text( $a.text() + " (#{result0.length})" )
                 _status.log("among #{result0.length} posts ..")
                 _status.log("#{result1.length} liked activities..")
                 #
@@ -341,14 +345,16 @@ table.result-data tr.post-message.folded {
     }
 
     function startApp() {
-        $('#actions li.fb-action').show();
+        $('.checking-login-status').hide();
         $('#actions li.login').hide();
+        //
+        $('#actions li.fb-action').show();
     }
 
     function testAPI() {
-        $("#status").append('<li>Welcome! Fetching your information....</li>');
+        _status.log('Welcome! 어디보자...');
         FB.api('/me', function(response) {
-            $("#status").append('<li>Good to see you, ' + response.name + '.</li>');
+            _status.log(response.name + ' 님의 모든 데이터를 뽑아가겠습니다.');
         });
     }
 
@@ -406,6 +412,6 @@ table.result-data tr.post-message.folded {
 
 </script>
 
-<ul id="status"></ul>
+<ul id="status" style="display: none;"></ul>
 </body>
 </html>
