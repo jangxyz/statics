@@ -1,0 +1,25 @@
+ul#status {
+    list-style-type: none;
+    display: block;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    background-color: rgba(128,128,128,0.3);
+    padding: 10px;
+}
+
+ul#status.is-folded {
+    cursor: pointer;
+}
+ul#status.is-folded li {
+    display: none;
+}
+ul#status.is-folded li:last-child {
+    display: list-item;
+}
+
+ul#status.is-expanded li {
+    display: list-item;
+}
+
+
