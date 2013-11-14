@@ -252,7 +252,8 @@ table.result-data tr.post-message.folded {
 <script>
     window.fbAsyncInit = function() {
         console.log('connecting to facebook...');
-        FB.init({ appId: '234794293350263', channelUrl: "//jangxyz.net/play/fb/channel.html", status: true, cookie: true, xfbml : true });
+        var appId = document.location.href.match(/jangxyz.net/) ? '234794293350263' : "620410998004546";
+        FB.init({ appId: appId, channelUrl: "//jangxyz.net/play/fb/channel.html", status: true, cookie: true, xfbml : true });
         
 
         // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
