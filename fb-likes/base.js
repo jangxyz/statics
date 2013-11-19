@@ -99,11 +99,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }(document, 'script', 'facebook-jssdk'));
 
     function handleLogin() {
-        $('#actions a.login').on('click', function(e) {
+        $('.checking-login-status').hide();
+        $('.actions li.login').show();
+        $('.actions a.login').on('click', function(e) {
             e.preventDefault();
             loginFacebook();
         });
-        $('#actions li.login').show();
     }
 
     function testAPI() {

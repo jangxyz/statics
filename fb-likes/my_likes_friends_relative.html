@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>최근 내가 like한 친구</title>
+    <title>최근 내가 like한 친구 - 상대적</title>
 
     <script src="base.js"></script>
     <link rel="stylesheet" type="text/css" href="fb-likes.css" />
@@ -24,7 +24,7 @@
 <body>
 <div id="fb-root"></div>
 
-<h1>최근 내가 like한 친구</h1>
+<h1>최근 내가 like한 친구 - 상대적</h1>
 <p>
     주의: 당신의 데이터는 아무렇게나 쓰일 수 있습니다.
 </p>
@@ -58,12 +58,11 @@
             query1: """
                 SELECT uid2 FROM friend WHERE uid1 = me()
             """
-            # friend's post I liked
+            # friends' posts
             query2: """
-                SELECT post_id, source_id, message, like_info.like_count
-                    FROM stream 
+                SELECT source_id, post_id, message, created_time, permalink, like_info
+                    FROM stream
                     WHERE source_id IN (SELECT uid2 FROM #query1) 
-                        AND likes.user_likes=1 
                     LIMIT #{limit}
             """
             # user info
@@ -72,19 +71,15 @@
                     FROM user 
                     WHERE uid in (SELECT uid2 FROM #query1)
             """
-            # post info
-            query4: """
-                SELECT post_id,message,created_time,permalink 
-                    FROM stream 
-                    WHERE post_id in (SELECT post_id FROM #query2)
-            """
 
         runQuery query, (response) -> 
             _status.log("query fetched")
             console.log("Fetched after query", response)
 
             #
-            [friend_ids,liked_posts,user_info,post_info] = (r.fql_result_set for r in response[0..3])
+            [friend_ids,friend_posts,user_info] = (r.fql_result_set for r in response[0..2])
+            liked_posts = (r for r in friend_posts when r.like_info.user_likes is true)
+            #
             $el.text(" (#{friend_ids.length})" )
             _status.log("among #{friend_ids.length} friends ..")
             _status.log("#{liked_posts.length} liked posts..")
@@ -93,8 +88,8 @@
             (user_map[r.uid] = r for r in user_info)
             #
             post_map = {}
-            (post_map[r.post_id] = r for r in post_info)
-            _status.log("#{post_info.length} posts..")
+            (post_map[r.post_id] = r for r in friend_posts)
+            _status.log("#{friend_posts.length} posts..")
             #
             liked_posts_map = {}
             (liked_posts_map[r.source_id] = []            for r in liked_posts)
@@ -102,22 +97,31 @@
             liked_posts_list = []
             (liked_posts_list.push([user_id, post_ids]) for user_id, post_ids of liked_posts_map)
             liked_posts_list = _.sortBy(liked_posts_list, ([user_id, post_ids]) -> -post_ids.length)
+            #
+            friend_posts_count_map = {}
+            (friend_posts_count_map[r.source_id]  = 0 for r in friend_posts)
+            (friend_posts_count_map[r.source_id] += 1 for r in friend_posts)
+            #
             ga('send', 'event', 'my-likes-friend', 'post-count', "#{friend_ids.length}/#{limit}")
-            ga('send', 'event', 'my-likes-friend', 'most-like-count', liked_posts_list[0][1].length)
+            if liked_posts_list
+                ga('send', 'event', 'my-likes-friend', 'most-like-count', liked_posts_list[0][1].length)
 
             #
             $table = $('<table class="result-data"></table>')
             for liked_posts in liked_posts_list
                 [user_id,post_ids] = liked_posts[0..1]
-                user_name  = user_map[user_id].name
-                post_count = post_ids.length
+                user_name        = user_map[user_id].name
+                liked_post_count = post_ids.length
+                total_post_count = friend_posts_count_map[user_id]
                 posts      = (post_map[post_id] for post_id in post_ids)
                 posts      = posts || [];
                 
                 $("<tr class='count'></tr>")
                     .append("""
                         <td>#{user_name}</td>
-                        <td>#{post_count}</td>
+                        <td>#{liked_post_count/total_post_count}</td>
+                        <td>#{liked_post_count}</td>
+                        <td>#{total_post_count}</td>
                     """).on('click', (e) ->
                         $(this).nextUntil('tr.count').filter('tr.post-message')
                             .toggleClass('folded')

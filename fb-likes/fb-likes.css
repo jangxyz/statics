@@ -26,6 +26,10 @@ table.result-data tr.post-message.folded {
 }
 
 
+h3.actions {
+    display: none;
+}
+
 .actions li.auth-action {
     display: none;
 }

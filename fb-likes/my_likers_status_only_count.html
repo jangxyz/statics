@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>최근 내가 like한 친구</title>
+    <title>최근 내 상태 좋아한 사람</title>
 
     <script src="base.js"></script>
     <link rel="stylesheet" type="text/css" href="fb-likes.css" />
@@ -19,12 +19,11 @@
     <script src="status-log.js"></script>
     <link rel="stylesheet" type="text/css" href="status-log.css" />
 
-
 </head>
 <body>
 <div id="fb-root"></div>
 
-<h1>최근 내가 like한 친구</h1>
+<h1>최근 내 상태 좋아한 사람</h1>
 <p>
     주의: 당신의 데이터는 아무렇게나 쓰일 수 있습니다.
 </p>
@@ -46,73 +45,74 @@
 
 <script type="text/coffeescript">
     #
-    # Get friends whose posts I liked
+    # Get count of people who liked my posts
     #
-    window.show = getLikedFriendsCount = ->
+    window.show = getMyLikersCount = ->
         $el = $("#result")
 
-        limit = 1000
+        limit = 50
 
         query = 
-            # friends
             query1: """
-                SELECT uid2 FROM friend WHERE uid1 = me()
+                SELECT post_id 
+                FROM stream 
+                WHERE source_id = me() AND actor_id = me() 
+                    AND type != 80
+                    AND privacy.value != "SELF" 
+                    AND message != ""
+                LIMIT #{limit}
             """
-            # friend's post I liked
             query2: """
-                SELECT post_id, source_id, message, like_info.like_count
-                    FROM stream 
-                    WHERE source_id IN (SELECT uid2 FROM #query1) 
-                        AND likes.user_likes=1 
-                    LIMIT #{limit}
+                SELECT post_id,user_id FROM like WHERE post_id in (
+                    SELECT post_id FROM #query1
+                )
             """
-            # user info
             query3: """
-                SELECT uid,name 
-                    FROM user 
-                    WHERE uid in (SELECT uid2 FROM #query1)
+                SELECT uid,name FROM user WHERE uid in (
+                    SELECT user_id FROM #query2
+                )
             """
-            # post info
             query4: """
-                SELECT post_id,message,created_time,permalink 
-                    FROM stream 
-                    WHERE post_id in (SELECT post_id FROM #query2)
+                SELECT post_id,message,created_time,permalink FROM stream WHERE post_id in (
+                    SELECT post_id FROM #query2
+                )
             """
 
         runQuery query, (response) -> 
             _status.log("query fetched")
             console.log("Fetched after query", response)
+            #window.response = response            
 
             #
-            [friend_ids,liked_posts,user_info,post_info] = (r.fql_result_set for r in response[0..3])
-            $el.text(" (#{friend_ids.length})" )
-            _status.log("among #{friend_ids.length} friends ..")
-            _status.log("#{liked_posts.length} liked posts..")
+            [result0,result1,result2,result3] = (r.fql_result_set for r in response[0..3])
+            $el.text(" (#{result0.length})" )
+            _status.log("among #{result0.length} posts ..")
+            _status.log("#{result1.length} liked activities..")
             #
             user_map = {}
-            (user_map[r.uid] = r for r in user_info)
+            (user_map[r.uid] = r for r in result2)
+            _status.log("#{result2.length} users liked..")
             #
             post_map = {}
-            (post_map[r.post_id] = r for r in post_info)
-            _status.log("#{post_info.length} posts..")
+            (post_map[r.post_id] = r for r in result3)
+            _status.log("#{result3.length} posts..")
             #
-            liked_posts_map = {}
-            (liked_posts_map[r.source_id] = []            for r in liked_posts)
-            (liked_posts_map[r.source_id].push(r.post_id) for r in liked_posts)
-            liked_posts_list = []
-            (liked_posts_list.push([user_id, post_ids]) for user_id, post_ids of liked_posts_map)
-            liked_posts_list = _.sortBy(liked_posts_list, ([user_id, post_ids]) -> -post_ids.length)
-            ga('send', 'event', 'my-likes-friend', 'post-count', "#{friend_ids.length}/#{limit}")
-            ga('send', 'event', 'my-likes-friend', 'most-like-count', liked_posts_list[0][1].length)
+            userlike_map = {}
+            (userlike_map[r.user_id] = []            for r in result1)
+            (userlike_map[r.user_id].push(r.post_id) for r in result1)
+            userlike_list = []
+            (userlike_list.push([user_id, post_ids]) for user_id, post_ids of userlike_map)
+            userlike_list = _.sortBy(userlike_list, ([user_id, post_ids]) -> -post_ids.length)
+            ga('send', 'event', 'my-likers', 'post-count', "#{result0.length}/#{limit}")
+            ga('send', 'event', 'my-likers', 'most-like-count', userlike_list[0][1].length)
 
             #
             $table = $('<table class="result-data"></table>')
-            for liked_posts in liked_posts_list
-                [user_id,post_ids] = liked_posts[0..1]
+            for userlike in userlike_list
+                [user_id,post_ids] = userlike[0..1]
                 user_name  = user_map[user_id].name
                 post_count = post_ids.length
                 posts      = (post_map[post_id] for post_id in post_ids)
-                posts      = posts || [];
                 
                 $("<tr class='count'></tr>")
                     .append("""
@@ -124,9 +124,6 @@
                     )
                 .appendTo($table)
                 for post in posts
-                    if not post?
-                        console.log('cannot find post for :', liked_posts)
-                        continue
                     post_link = "<a href='#{post.permalink}'>#{post.message}</a>"
                     $("<tr class='post-message folded'></tr>")
                         .append("""
@@ -138,7 +135,6 @@
 
         _status.log("<pre class='fql'>#{JSON.stringify query}</pre>")
         #$el.append("<pre class='fql'>#{JSON.stringify query}</pre>")
-
 
 </script>
 
@@ -154,5 +150,3 @@
 <ul id="status" style="display: none;"></ul>
 </body>
 </html>
-
-
