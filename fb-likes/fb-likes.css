@@ -26,13 +26,13 @@ table.result-data tr.post-message.folded {
 }
 
 
-#actions li.auth-action {
+.actions li.auth-action {
     display: none;
 }
-#actions li.fb-action {
+.actions li.fb-action {
     display: none;
 }
-#actions li.login {
+.actions li.login {
     display: none;
 }
 
