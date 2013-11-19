@@ -1,0 +1,39 @@
+body {
+    margin: 0 0 100px 0;
+    padding: 0;
+}
+
+table.result-data td.post_id {
+    display: none;
+}
+table.result-data td.message,
+table.result-data td.created_time {
+    font-size: 60%;
+    padding-left: 20px;
+}
+table.result-data td a {
+    text-decoration: none;
+}
+table.result-data tr.count {
+    cursor: pointer;
+}
+table.result-data tr.post-message {
+    background-color: rgba(200,200,200,0.3);
+    font-size: 60%;
+}
+table.result-data tr.post-message.folded {
+    display: none;
+}
+
+
+#actions li.auth-action {
+    display: none;
+}
+#actions li.fb-action {
+    display: none;
+}
+#actions li.login {
+    display: none;
+}
+
+

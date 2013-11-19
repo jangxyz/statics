@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>내 최근 포스팅 보기</title>
+
+    <script src="base.js"></script>
+    <link rel="stylesheet" type="text/css" href="fb-likes.css" />
+
+    <script src="lodash.min.js"></script>
+    <script src="underscore.string.min.js"></script>
+    <script src="coffee-script.js"></script>
+    <script src="jquery-1.10.2.min.js"></script>
+    <script src="moment.min.js"></script>
+
+    <script type="text/javascript" src="http://neomparam.github.io/feeduck/feeduck.jquery.js"></script>
+    <link rel="stylesheet" href="http://neomparam.github.io/feeduck/feeduck.css" type="text/css" />
+
+    <script src="status-log.js"></script>
+    <link rel="stylesheet" type="text/css" href="status-log.css" />
+
+
+</head>
+<body>
+<div id="fb-root"></div>
+
+<h1>내 최근 포스팅 보기</h1>
+<p>
+    주의: 당신의 데이터는 아무렇게나 쓰일 수 있습니다.
+</p>
+
+<div class='checking-login-status'>
+    로그인 확인 중...
+</div>
+<ul id="actions">
+    <li class='login auth-action'>
+        페이스북에 <a href="" class='login'>로그인</a>하세여
+    </li>
+    <li class='logout auth-action'>
+        페이스북에서 <a href="#" onclick="logoutFacebook();return false;">로그아웃</a>
+    </li>
+</ul>
+
+<div id='result'>
+</div>
+
+<script type="text/javascript">
+    if (!window.console) window.console = {log: function() {}};
+</script>
+
+<script type="text/coffeescript">
+    #
+    # Get posts written by me w/ likes
+    #
+    window.show = getMyPosts = ->
+        $el = $("#result")
+
+        limit = 50
+
+        query = """
+                    SELECT type, app_data, app_id, post_id, actor_id, source_id, via_id, target_id, message, attribution, created_time, like_info.like_count, permalink
+                    FROM stream 
+                    WHERE source_id = me() AND actor_id = me() AND privacy.value != "SELF" AND message != ""
+                    LIMIT #{limit}
+                """
+                    #LIMIT #{limit}
+                    #AND created_time > now() - 60*60*24*7
+
+        runQuery query, (response) -> 
+            _status.log("query fetched");
+            console.log("Fetched after query", response);
+            
+            ga('send', 'event', 'my-posts', 'result', "#{response.length}/#{limit}")
+
+            #
+            $table = $('<table class="result-data"></table>')
+            for r in response
+                date = moment(r.created_time * 1000).format('MM/DD HH:mm');
+                $("<tr class='post' id='post-#{r.post_id}'></tr>")
+                    .append("""
+                        <td class="post_id">#{r.post_id}</td>
+                        <td class="message"><a href="#{r.permalink}" target="_blank">#{r.message}</a></td>
+                        <td class="like_count">#{r.like_info.like_count}</td>
+                        <td class="created_time"><a href="#{r.permalink}" target="_blank">#{date}</a></td>
+                    """)
+                .appendTo($table)
+            $table.appendTo($el)
+
+        _status.log("<pre class='fql'>#{JSON.stringify query}</pre>")
+        #$el.append("<pre class='fql'>#{JSON.stringify query}</pre>")
+
+
+</script>
+
+<script type="text/javascript">
+    function startApp() {
+        $('.checking-login-status').hide();
+        $('#actions li.login').hide();
+        //
+        show();
+    }
+</script>
+
+<ul id="status" style="display: none;"></ul>
+</body>
+</html>
