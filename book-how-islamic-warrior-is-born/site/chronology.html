@@ -1,0 +1,541 @@
+<!doctype html>
+<html>
+<head>
+    <title>이슬람 전사의 탄생 연표</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/locale/ko.js"></script>
+
+<style>
+
+.ui.container {
+    margin-bottom: 15px;
+    margin-top: 3px;
+}
+
+h2.ui.header {
+    text-align: right;
+    padding: 1.5rem 1rem 1rem 1rem;
+    margin: 0;
+    background-color: whitesmoke;
+}
+h3.ui.header {
+    text-align: center;
+}
+
+.ui.list.sorted .header2 {
+    display: none;
+}
+.ui.list.sorted .header3 {
+    display: none;
+}
+
+.ui.list {
+    margin-left: 10px;
+}
+
+.ui.list > .item {
+    font-size: 0.7rem;
+}
+.ui.list > .item.has-same-year-with-prev {
+}
+.ui.list > .item:not(.has-same-year-with-prev) {
+    border-top: 1px solid rgba(128,128,128, 0.3);
+}
+
+.ui.list > .item > .head {
+    display: inline-block;
+    font-size: 1.0rem;
+    width: 172px;
+    overflow: visible;
+    white-space: nowrap;
+}
+.ui.list > .item > .head .year-part {
+    display: inline-block;
+    width: 47.5px;
+    text-align: justify;
+}
+.ui.list > .item > .head .year-part.is-same-with-prev {
+    margin-top: -2px;
+    visibility: hidden;
+}
+.ui.list > .item > .head .year-part:not(.is-same-with-prev) {
+    margin-top: 5px;
+}
+.ui.list > .item > .head .month-part {
+    display: inline-block;
+    width: 26px;
+    font-size: 85%;
+    text-align: right;
+}
+.ui.list > .item > .head .date-part {
+    display: inline-block;
+    width: 24px;
+    font-size: 76%;
+    text-align: right;
+}
+.ui.list > .item > .head .time-part {
+    display: inline-block;
+    width: 24px;
+    font-size: 65%;
+    max-width: 64px;
+}
+
+.ui.list > .item > .head .inexact-suffix {
+    font-size: 80%;
+}
+.ui.list > .item > .head .period-suffix {
+    font-size: 80%;
+}
+.ui.list > .item > .head .decade-suffix {
+    font-size: 80%;
+}
+
+/*
+.ui.list > .item:not(.date):not(.month):not(.year) {
+    display: none;
+}
+*/
+.ui.list > .item.duration {
+    display: none;
+}
+
+.ui.list > .item > .description {
+    display: inline-block;
+    padding-left: 1rem;
+    color: #999;
+}
+.ui.list > .item > .description > span {
+    text-decoration: underline;
+}
+
+.ui.list > .item:hover {
+    background-color: rgba(128,128,128, 0.2);
+}
+
+</style>
+
+<script>
+
+function sortByDate() {
+    // sort
+    var $items = $('.ui.list > .item').toArray();
+    $items = _.sortBy($items, function(el) {
+        var $el = $(el).find('> .head');
+        return parseInt($el.attr('data-date'));
+    });
+    $('.ui.list').append($items).addClass('sorted');
+
+    // check consecutive years
+    var $items = $('.ui.list > .item');
+    $items.each(function(i, el) {
+       if (i === 0) {
+           return;
+       }
+       var $el = $(el); 
+       var $prevEl = $($items[i-1]);
+
+       var currentYear = $el.find('.year-part').text();
+       if (currentYear && currentYear === $prevEl.find('.year-part').text()) {
+           $el.addClass('has-same-year-with-prev')
+               .find('.year-part').addClass('is-same-with-prev');
+       }
+    });
+}
+function sortByChapter() {
+    var $items = $('.ui.list > .item').toArray();
+    $items = _.sortBy($items, function(el) {
+        var classNames = $(el).attr('class');
+        var itemIndex = classNames.replace(/.*item-([0-9]+).*/, "$1");
+        return parseInt(itemIndex);
+    });
+    $('.ui.list').append($items).removeClass('sorted');
+
+    // uncheck consecutive years
+    $('.ui.list .item').removeClass('has-same-year-with-prev');
+    $('.ui.list .item .year-part').removeClass('is-same-with-prev');
+}
+
+$(function() {
+
+    // assign item index
+    $('.ui.list > .item').each(function(i, el) {
+        $(el).addClass("item-" + i);
+    });
+
+    // copy class to parent
+    $('.item > .head').each(function(i, el) {
+        var $el = $(el);
+        var classNames = $el.attr('class').split(' ');
+            classNames = _.without(classNames, 'head').join(' ');
+        $el.parent().addClass(classNames);
+    });
+
+    // parse dates 
+    $('.item > .head.date').each(function(i, el) {
+        var $el = $(el);
+        var mt = moment($el.text(), "YYYY년 M월 D일");
+        $el.data('date', mt);
+        $el.attr('data-date', mt.toDate().getTime());
+    });
+    $('.item > .head.month').each(function(i, el) {
+        var $el = $(el);
+        var mt = moment($el.text(), "YYYY년 M월");
+        $el.data('date', mt);
+        $el.attr('data-date', mt.toDate().getTime());
+    });
+    $('.item > .head.year').each(function(i, el) {
+        var $el = $(el);
+        var mt = moment($el.text(), "YYYY년");
+        $el.data('date', mt);
+        $el.attr('data-date', mt.toDate().getTime());
+    });
+    $('.item > .head.decade').each(function(i, el) {
+        var $el = $(el);
+        var mt = moment($el.text(), "YYYY년대");
+        $el.data('date', mt);
+        $el.attr('data-date', mt.toDate().getTime());
+    });
+    $('.item > .head.period-decades').each(function(i, el) {
+        var $el = $(el);
+        var mt = moment($el.text(), "YYYY~");
+        $el.data('date', mt);
+        $el.attr('data-date', mt.toDate().getTime());
+    });
+
+    // sort
+    //sortByDate();
+
+    // bind menu click
+    $('.ui.menu > a.item').on('click', function(ev) {
+        ev.preventDefault();
+        var $el = $(ev.target);
+        if ($el.hasClass('disabled')) {
+            return;
+        }
+        if ($el.hasClass('active')) {
+            return;
+        }
+        //
+        if ($el.hasClass('chapter')) {
+            sortByChapter();
+        }
+        else if ($el.hasClass('time')) {
+            sortByDate();
+        }
+        $('.ui.menu > .item.active').removeClass('active');
+        $el.addClass('active');
+    });
+
+    $('.dropdown').dropdown();
+});
+    </script>
+</head>
+<body>
+<div class="ui container">
+
+    <div class="ui five item menu pointing">
+        <a href="#" class="chapter item active">챕터</a>
+        <a href="#" class="time item">시간</a>
+        <a href="#" class="person item disabled">사람</a>
+        <a href="#" class="country item disabled">국가</a>
+        <a href="#" class="item disabled">조직</a>
+    </div>
+
+<div class="ui fluid selection dropdown">
+    <input type="hidden" name="part">
+    <i class="dropdown icon"></i>
+    <div class="default text">1부 현대 이슬람주의의 탄생</div>
+    <div class="menu" style="max-height: 300px;">
+        <div class="disabled item" data-value="0">전체</div>
+        <div class="item" data-value="1">1부 현대 이슬람주의의 탄생</div>
+        <div class="disabled item" data-value="2">2부 현대 이슬람주의의 헤지라, 아프간전쟁</div>
+        <div class="disabled item" data-value="3">3부 글로벌 지하드</div>
+        <div class="disabled item" data-value="4">4부 9·11로 가는 여정</div>
+        <div class="disabled item" data-value="5">5부 테러와의 전쟁, 멍청한 전쟁</div>
+        <div class="disabled item" data-value="6">6부 끝나지 않는 전쟁</div>
+    </div>
+</div>
+
+<h1 class="ui header">1부 현대 이슬람주의의 탄생</h1>
+
+<div class="ui list">
+
+<div class="item header header2"><h2 class="ui header">1 사우디왕국과 와하비즘</h2></div>
+
+<div class="item"><span class="head date"> <span class="year-part">1945년</span> <span class="month-part">2월</span> <span class="date-part">14일</span></span><span class="description">미국의 <span>프랭클린 루스벨트</span>와 사우디라아라비아의 <span>이븐 사우드</span>가 그레이트비터 호수에서 양국 정상회담을 가짐</span></div>
+<div class="item"><span class="head duration"> <span class="year-part">1945년</span> <span class="month-part">2월</span> <span class="date-part">17일</span></span><span class="description">정상회담이 3일간 지속됨</span></div>
+
+<div class="item header header3"><h3 class="ui header">300년 권력의 시작</h3></div>
+
+<div class="item"><span class="head period period-from period-century">18세기 <span class="period-suffix">이후</span></span><span class="description">유럽 제국주의 세력이 중동 지역을 분할해서 통치함</span></div>
+<div class="item"><span class="head century">18세기</span><span class="description">사우드와 이슬람 율법사의 관계가 시작됨</span></div>
+<div class="item"><span class="head year"><span class="year-part">1744년</span></span><span class="description">사우드의 수장 <span>무함마드 빈 사우드</span>는 박해받던 무함마드 <span>이븐 압둘 와하브라</span>는 이슬람 율법학자와 동맹을 맺음</span></div>
+<div class="item"><span class="head duration">300년간</span><span class="description">이 기간만큼 동맹이 지속됨</span></div>
+
+<div class="item header header3"><h3 class="ui header">와하브, 사우드를 만나다</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1703년</span></span><span class="description"><span>와하브</span>가 네지드 유야나의 이슬람 율법학자 가문에서 태어남</span></div>
+<div class="item"><span class="head century">13세기</span><span class="description">시리아의 금욕적인 법학자인 <span>이븐 타이미야</span>가 살았음</span></div>
+<div class="item"><span class="head year"><span class="year-part">1766년</span></span><span class="description"><span>무함마드 빈 사우드</span> 암살 당함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1804년</span></span><span class="description"><span>압둘 아지즈 빈 사우드</span>가 메디나를 침략해서 <span>무함마드</span>의 동료들이 묻힌 무덤을 파괴함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1811년</span></span><span class="description"><span>압둘 아지즈 빈 사우드</span>가 오므산튀르크 제국의 <span>소아시아</span>로 군사작전을 준비하기 시작함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1815년</span></span><span class="description"><span>무함마드 알리</span>가 <span>압둘 아지즈</span>의 군대를 박살냄</span></div>
+
+<div class="item header header3"><h3 class="ui header">현대 사우디아라비아왕국의 출발</h3></div>
+
+<div class="item"><span class="head decade">1910년<span class="decade-suffix">대</span></span><span class="description">영국이 독일 편에 선 터키를 제압하기 위해 부족 세력들에게 접근하여 봉기를 부추김</span>
+- 〈아라비아의 로렌스〉
+</div>
+<div class="item"><span class="head year"><span class="year-part">1890년</span></span><span class="description">사우드 부족이 알라시드 부족에게 근거지 리야드를 빼앗김</span></div>
+<div class="item"><span class="head duration">10년 (~1900년)</span><span class="description"><span>이븐 사우드</span>가 리야드가 함락된 이후 난민 생활을 한 기간</span></div>
+<div class="item"><span class="head year"><span class="year-part">1901년</span></span><span class="description"><span>이븐 사우드</span>가 네지드를 탈환하기 위한 군사 공격을 기획</span></div>
+<div class="item"><span class="head date"><span class="year-part">1902년</span> <span class="month-part">1월</span> <span class="date-part">15일</span> <span class="time-part">밤</span></span><span class="description"><span>이븐 사우드</span>가 리야드를 공격해 도시를 장악함</span></div>
+<div class="item"><span class="head duration duration-years">2년</span><span class="description">과거 사우드 가문의 추종자들이 모여 네지드 지역 절반을 탈환하는 데 걸린 기간</span></div>
+<div class="item"><span class="head year"><span class="year-part">1912년</span></span><span class="description"><span>이븐 사우드</span>가 네지드와 아라비아 동부 해안 지역을 정복한 거대 세력으로 떠오름</span></div>
+<div class="item"><span class="head duration">200년 전</span><span class="description">와하브파 추종자들이 동맹을 맺은 시기</span></div>
+
+<div class="item header header3"><h3 class="ui header">영국의 중복 계약</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1915년</span></span><span class="description">영국과 사우드 가문이 <span>다린 조약</span>을 맺음</span></div>
+<div class="item"><span class="head year"><span class="year-part">1916년</span></span><span class="description">영국의 외교관 <span>마크 사이크스</span>와 프랑스 외교관 <span>조르주 피코</span>가 만나 <span>사이크스-피코 협정</span>을 맺음</span></div>
+<div class="item"><span class="head year"><span class="year-part">1917년</span></span><span class="description">영국 외무장관 <span>아서 밸푸어</span>이 유대인 은행가 <span>라이오넬 로스차일드</span> 경에게 <span>밸푸어 선언</span>을 함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1924년</span></span><span class="description">사우드 가문이 메카를 함락함</span></div>
+<div class="item"><span class="head duration">700년간 (~1924년)</span><span class="description">하시미테 가문이 메카를 통치해 온 기간</span></div>
+
+<div class="item header header3"><h3 class="ui header">반란과 진압, 동맹의 위기</h3></div>
+
+<div class="item"><span class="head month"><span class="year-part">1929년</span> <span class="month-part">3월</span></span><span class="description"><span>이븐 사우드</span> 군대가 반란을 일으킨 <span>이크완</span> 군대를 분쇄함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1932년</span></span><span class="description"><span>이븐 사우드</span>가 사우디아라비아 왕국을 선포함</span></div>
+<div class="item"><span class="head duration">200년 이상</span><span class="description">이크완 반란과 진압이 일어나기 까지 지속된 <span>사우드-와하드 동맹</span>의 기간</span></div>
+
+<div class="item header header2"><h2 class="ui header">2 무슬림형제단과 ‘이슬람주의의 레닌’ 쿠틉</h2></div>
+
+<div class="item"><span class="head year"><span class="year-part">1928년</span></span><span class="description"><span>무슬림형제단</span> 창설</span></div>
+
+<div class="item header header3"><h3 class="ui header">무슬림형제단의 창설</h3></div>
+
+<div class="item"><span class="head month"><span class="year-part">1928년</span> <span class="month-part">3월</span></span><span class="description"><span>하산 알 반나</span>가 이스마일리아에서 비정치적 사회 운동 단체 <span>무슬림형제단</span>을 만듦</span></div>
+<div class="item"><span class="head duration">10여 년 만</span><span class="description"><span>무슬림형제단</span>이 거대 단체로 부상하는 데 걸린 시간</span></div>
+<div class="item"><span class="head period period-year period-from">1936년<span class="period-suffix">부터</span></span><span class="description">이집트에서 영국의 통치를 바대하는 운동을 전개함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1948년</span></span><span class="description">팔레스타인 땅에 이스라엘이 건국됨</span></div>
+
+<div class="item header header3"><h3 class="ui header">팔레스타인 분쟁과 무슬림형제단의 정치 운동화</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1936년</span></span><span class="description">팔레스타인 땅에서 아랍인들의 폭동이 시작됨</span></div>
+<div class="item"><span class="head period period-century period-from">20세기 <span class="inexact-suffix">초</span><span class="period-suffix">부터</span></span><span class="description">팔레스타인 땅에 유대인들이 밀고 들어오기 시작함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1862년</span></span><span class="description">독일의 시오니스트 <span>모메스 헤스</span>가 시오니즘에 대해 얘기함</span></div>
+<div class="item"><span class="head duration duration-decades">20~30년</span><span class="description"><span>하임 바이츠만</span>이 유대인 100만명을 보내는 데 걸린다고 얘기한 시간</span></div>
+<div class="item"><span class="head year"><span class="year-part">1936년</span></span><span class="description">팔레스타인 주민들이 파업과 폭돔을 일으킴</span></div>
+<div class="item"><span class="head year"><span class="year-part">1939년</span></span><span class="description">3년 동안 팔레스타인 폭동이 지속됨</span></div>
+<div class="item"><span class="head year"><span class="year-part">1948년</span></span><span class="description">이스라엘의 건국으로 이집트 및 다른 아랍 국가들과 이스라엘의 <span>1차 중동 전쟁</span>이 벌어짐</span></div>
+<div class="item"><span class="head month"><span class="year-part">1948년</span> <span class="month-part">12월</span></span><span class="description">이집트 정부가 <span>무슬림형제단</span>을 해체하는 조처를 내림</span></div>
+<div class="item"><span class="head date"><span class="year-part">1949년</span> <span class="month-part">2월</span> <span class="date-part">12일</span></span><span class="description"><span>반나</span> 암살 당함</span></div>
+
+<div class="item header header3"><h3 class="ui header">‘이슬람주의의 레닌’ 사이드 쿠틉</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1949년</span></span><span class="description"><span>사이드 쿠틉</span>이 <span>반나</span>의 미국에서 암살 소식을 들음</span></div>
+
+<div class="item header header3"><h3 class="ui header">나세르의 쿠데타</h3></div>
+
+<div class="item"><span class="head duration">2년 남짓</span><span class="description"><span>쿠틉</span>의 미국 유학 생활 기간</span></div>
+<div class="item"><span class="head month"><span class="year-part">1950년</span> <span class="month-part">8월</span></span><span class="description"><span>쿠틉</span>이 이집트로 귀국함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1948년</span></span><span class="description">이집트와 아랍 세계가 이스라엘과의 전쟁에서 패배함</span></div>
+<div class="item"><span class="head month"><span class="year-part">1952년</span> <span class="month-part">1월</span></span><span class="description">이스마일리아에서 반영국 폭동이 일어나 카이로 전체 시가지로 번짐</span></div>
+<div class="item"><span class="head date"><span class="year-part">1952년</span> <span class="month-part">6월</span> <span class="date-part">22일</span></span><span class="description"><span>가말 압델 나세르</span>의 쿠데타가 성공함</span></div>
+<div class="item"><span class="head duration">2,500년 만</span><span class="description">이집트가 이집트인에 의해 통치되는 시대로 돌아가는 데 걸린 기간</span></div>
+
+<div class="item header header3"><h3 class="ui header">서방과 이슬람주의의 첫 협력</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1951년</span></span><span class="description">이란에서 <span>모하마드 모사데크</span>가 총리로 선출</span></div>
+<div class="item"><span class="head month"><span class="year-part">1951년</span> <span class="month-part">4월</span></span><span class="description">이란 의회는 석유산업 국유화 조처법을 통과시킴</span>
+- <span>앵글로-이란 오일 컴퍼니(AIOC)</span>
+</div>
+<div class="item"><span class="head year inexact">1952년 <span class="inexact-suffix">말</span></span><span class="description">미국에서 공화당의 <span>드와이트 아이젠하워</span>가 대통령으로 당선됨</span></div>
+<div class="item"><span class="head month"><span class="year-part">1953년</span> <span class="month-part">3월</span></span><span class="description">미국의 <span>존 덜레스</span> 국무장관이 CIA 국장 <span>앨런 덜레스</span>에게 모사데크 타도 계획을 짜라고 지시함</span></div>
+<div class="item"><span class="head date"><span class="year-part">1953년</span> <span class="month-part">8월</span> <span class="date-part">19일</span></span><span class="description">이란에서 왕정복고 찬반을 놓고 벌어진 폭력 시위가 벌어져 <span>모사데크</span>가 <span>파졸라 자헤디</span>에게 권력을 이양함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1979년</span></span><span class="description"><span>루홀라 호메이니</span>가 이슬람권에서 최초의 이슬람 혁명을 주도한 시기</span></div>
+<div class="item"><span class="head year"><span class="year-part">1979년</span></span><span class="description">이슬람 혁명이 일어남</span></div>
+
+<div class="item header header3"><h3 class="ui header">쿠틉의 ‘순교’</h3></div>
+
+<div class="item"><span class="head year inexact">1954년 <span class="inexact-suffix">초</span></span><span class="description"><span>쿠틉</span>이 <span>나세르</span>에 의해 감옥에 감</span></div>
+<div class="item"><span class="head date"><span class="year-part">1954년</span> <span class="month-part">10월</span> <span class="date-part">26일</span></span><span class="description"><span>나세르</span>가 연설 도중 피격 시도 당함</span></div>
+<div class="item"><span class="head duration">15년</span><span class="description">암살 시도로 종신형이 선고된 <span>쿠틉</span>이 발병으로 감형된 기간</span></div>
+<div class="item"><span class="head duration">10년</span><span class="description"><span>쿠틉</span>이 치료감호소에서 보낸 기간</span>
+- 《쿠란의 그늘에서》
+</div>
+<div class="item"><span class="head year"><span class="year-part">1964년</span></span><span class="description"><span>진리를 향한 이정표</span> 출판되었으나 금지 당함</span>
+- 《진리를 향한 이정표》
+</div>
+<div class="item"><span class="head duration">15년 동안</span><span class="description">쿠틉이 말한 순교 당할 때까지 지하드를 수행한 기간</span></div>
+
+<div class="item header header3"><h3 class="ui header">쿠틉의 후계자</h3></div>
+
+<div class="item"><span class="head date"><span class="year-part">1966년</span> <span class="month-part">8월</span> <span class="date-part">29일</span></span><span class="description"><span>쿠틉</span>이 교수형에 처해짐</span></div>
+<div class="item"><span class="head duration">1년</span><span class="description"><span>쿠틉</span>의 죽음이 그의 말을 더 강하게 할 것이라는 유언이 실현되기 시작하는 데 걸린 시간</span></div>
+<div class="item"><span class="head year"><span class="year-part">1954년</span></span><span class="description">이슬람주의자들이 일괄 검거됨</span>
+- <span>엘 샤페이</span>
+</div>
+<div class="item"><span class="head year"><span class="year-part">1966년</span></span><span class="description"><span>자와히리</span>가 세속주의 정부 전복과 이슬람 국가 건설에 헌신하는 지하 조직 찬설에 관여함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1967년</span></span><span class="description">6일 전쟁의 태풍이 몰아침</span></div>
+
+<div class="item header header2"><h2 class="ui header">3 6일전쟁, 세속주의와 이슬람주의의 변곡점</h2></div>
+
+<div class="item"><span class="head duration duration-dates">6일</span><span class="description">6일 전쟁이 벌어진 기간</span></div>
+<div class="item"><span class="head year"><span class="year-part">1954년</span></span><span class="description"><span>나세르</span>가 <span>무슬림형제단</span>의 암살 기도에 맞서 대응함</span></div>
+<div class="item"><span class="head duration inexact">10여 년 이상</span><span class="description">이후 나세르가 아랍 세계 전역에서 영웅으로 지낸 기간</span></div>
+
+<div class="item header header3"><h3 class="ui header">6일전쟁의 충격</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1956년</span></span><span class="description"><span>나세르</span>가 수에즈 운하를 국유화함</span></div>
+<div class="item"><span class="head duration">2년 전</span><span class="description">미국이 이란에서 모사데크 정부를 전복시킴</span></div>
+<div class="item"><span class="head year"><span class="year-part">1958년</span></span><span class="description"><span>나세르</span>가 시리아와 합쳐 통일 아랍 공화국을 구성하기로 하고 예멘까지 끌어들임</span></div>
+<div class="item"><span class="head duration">3년 뒤</span><span class="description">시리아에서 쿠데타가 일어남</span></div>
+<div class="item"><span class="head year"><span class="year-part">1963년</span></span><span class="description"><span>나세르</span>가 예멘 내전에 개입했다가 사우리아라비아와 반대편에 서면서 발목이 붙잡힘</span></div>
+<div class="item"><span class="head year"><span class="year-part">1966년</span></span><span class="description">쿠틉이 사형담항</span></div>
+<div class="item"><span class="head month"><span class="year-part">1967년</span> <span class="month-part">5월</span></span><span class="description"><span>나세르</span>는 이스라엘을 상대로 전쟁을 을러댐</span></div>
+<div class="item"><span class="head date"><span class="year-part">1967년</span> <span class="month-part">6월</span> <span class="date-part">5일</span></span><span class="description">이스라엘이 전격적으로 개전</span></div>
+<div class="item"><span class="head duration duration-hours">두 시간 만</span><span class="description">이스라엘이 이집트 공군력을 완전히 파괴하는 데 걸린 시간</span></div>
+<div class="item"><span class="head duration duration-days">5일 동안</span><span class="description">개전 이후 이스ㅏ엘이 접경한 3개국의 세 방면으로 지상군을 진격시킴</span></div>
+<div class="item"><span class="head duration duration-days">6일 만</span><span class="description">전쟁 종료</span></div>
+<div class="item"><span class="head duration">1년 전</span><span class="description">쿠틉이 교수형 당한 때</span></div>
+
+<div class="item header header3"><h3 class="ui header">아랍의 분열</h3></div>
+
+<div class="item"><span class="head duration">1년</span><span class="description">이스라엘이 <span>6일 전쟁</span>에서 승리한 뒤 반작용이 돌아오기까지 걸린 기간</span></div>
+<div class="item"><span class="head date"><span class="year-part">1968년</span> <span class="month-part">3월</span> <span class="date-part">21일</span></span><span class="description">이스라엘군이 요르단의 팔레스타인 난민촌 카라메를 공격함</span></div>
+<div class="item"><span class="head date"><span class="year-part">1968년</span> <span class="month-part">7월</span> <span class="date-part">23일</span></span><span class="description">팔레스타인 게릴라들이 엘알 여객기를 납치함</span></div>
+<div class="item"><span class="head date"><span class="year-part">1970년</span> <span class="month-part">9월</span> <span class="date-part">15일</span></span><span class="description">요르단에 계엄령 선포하면서 요르단 내전 시작</span>
+- 검은 9월
+</div>
+<div class="item"><span class="head month"><span class="year-part">1971년</span> <span class="month-part">7월</span></span><span class="description">검은 9월 종료</span></div>
+<div class="item"><span class="head year"><span class="year-part">1972년</span></span><span class="description">뮌헨 올림픽에서 이스라엘 선수단 인질극 벌어짐</span></div>
+
+<div class="item header header3"><h3 class="ui header">이슬람주의 세력의 지하드주의화</h3></div>
+
+<div class="item"><span class="head decade">1970년<span class="decade-suffix">대</span></span><span class="description">팔레스타인 문제 격화</span></div>
+<div class="item"><span class="head year"><span class="year-part">1970년</span></span><span class="description"><span>나세르</span> 심장마비로 사망, <span>안와르 사다트</span> 집권</span></div>
+<div class="item"><span class="head duration duration-years">4년</span><span class="description"><span>알 가마 알 이슬라미야</span>가 이집트의 모든 대학 캠퍼스들을 장악하는 데 걸린 기간</span></div>
+<div class="item"><span class="head year"><span class="year-part">1974년</span></span><span class="description">자와히리가 카이로대 의대를 졸업함</span>
+- <span>자마트 알 지하드</span>
+</div>
+
+<div class="item header header3"><h3 class="ui header">오일쇼크와 사우디 와하비즘의 확산</h3></div>
+
+<div class="item"><span class="head date"><span class="year-part">1973년</span> <span class="month-part">10월</span> <span class="date-part">6일</span></span><span class="description">이집트가 시리아와 함께 이스라엘을 침공하면서 <span>4차 중동 전쟁</span> 발발</span></div>
+<div class="item"><span class="head duration duration-dates">3일</span><span class="description">개전 후 이집트가 이스라엘의 반격에 밀리기 시작한 때</span></div>
+<div class="item"><span class="head date"><span class="year-part">1973년</span> <span class="month-part">10월</span> <span class="date-part">12일</span></span><span class="description">미국의 <span>리처드 닉슨</span> 행정부가 이스라엘 지원 전략을 공개적으로 발표함</span></div>
+<div class="item"><span class="head date"><span class="year-part">1973년</span> <span class="month-part">10월</span> <span class="date-part">19일</span></span><span class="description">닉슨 행정부가 이스라엘에 대한 22억 달러의 원조를 의회에 요청, 리비아에서 미국에 대한 석유 금수를 단행함</span></div>
+<div class="item"><span class="head date"><span class="year-part">1973년</span> <span class="month-part">10월</span> <span class="date-part">20일</span></span><span class="description">사우디아라비아와 다른 아랍 국가들이 리비아를 뒤따름</span></div>
+<div class="item"><span class="head decade period">1970년<span class="decade-suffix">대</span> <span class="period-suffix">내내</span></span><span class="description">석유 위기로 전 세계에 경제 불황이 불어닥친 기간</span>
+- 오일쇼크
+</div>
+<div class="item"><span class="head year"><span class="year-part">1971년</span></span><span class="description">전후에 설계된 <span>브레턴우즈 체제</span>가 붕괴딤</span></div>
+<div class="item"><span class="head year"><span class="year-part">1971년</span></span><span class="description">미국이 달러화를 금 1온스당 35달러에 고정하고 교환해주던 금 태환제도를 전격적으로 폐지함</span></div>
+<div class="item"><span class="head period period-decades">1960~1970년<span class="decade-suffix">대</span></span><span class="description">아랍민족주의가 아랍 세계에 확산됨</span></div>
+<div class="item"><span class="head decade inexact">1960년<span class="decade-suffix">대</span> <span class="inexact-suffix">중반</span></span><span class="description">이집트가 지원한 예멘 내전에 사우디도 개입함</span></div>
+<div class="item"><span class="head decade period period-from">1970년<span class="decade-suffix">대</span> <span class="period-suffix">이후</span></span><span class="description">팔레스타인해방기구가 좌파 세력에 의해 장악되는 등 이슬람권에서 좌파와 소련의 영향력이 커짐</span></div>
+<div class="item"><span class="head decade period period-from">1960년<span class="decade-suffix">대</span> <span class="period-suffix">이후</span></span><span class="description">오일쇼크로 사우디에 주체 못할 정도로 오일달러가 들어옴</span></div>
+<div class="item"><span class="head year"><span class="year-part">1973년</span></span><span class="description">사우디가 주도한 석유 금수 조처</span></div>
+<div class="item"><span class="head period period-years">1969~1974년</span><span class="description">사우디 정부 예산이 92억 달러였던 기간</span></div>
+<div class="item"><span class="head duration">5년</span><span class="description">이후 1420억 달러로 증가하는 데 걸린 기간</span></div>
+<div class="item"><span class="head year"><span class="year-part">1962년</span></span><span class="description">사우디가 이슬람 각지에 <span>무슬림세계연맹</span> 지부를 세움</span></div>
+<div class="item"><span class="head decade period period-from period-decade">1950년<span class="decade-suffix">대</span> <span class="period-suffix">이후</span></span><span class="description">사우디의 자금으로 전세계에 1500개의 모스크가 지어진 때</span></div>
+<div class="item"><span class="head decade period period-from period-decade inexact">1970년<span class="decade-suffix">대</span> <span class="inexact-suffix">중반</span> <span class="period-suffix">이후</span></span><span class="description">대부분의 모스크가 건설된 기간</span></div>
+<div class="item"><span class="head inexact year">1975년 <span class="inexact-suffix">경</span></span><span class="description">사우디로 유입된 이민자의 수가 120만 명에 달한 시기</span></div>
+<div class="item"><span class="head year"><span class="year-part">1985년</span></span><span class="description">이민자의 수가 515만 명이 된 시기</span></div>
+<div class="item"><span class="head year"><span class="year-part">1983년</span></span><span class="description">해외 이만 노동력이 파키스탄에 송금하는 금액이 30억 달러에 달한 시기</span></div>
+<div class="item"><span class="head decade period period-from period-decade inexact">1970년<span class="decade-suffix">대</span> <span class="inexact-suffix">후반</span><span class="period-suffix">부터</span></span><span class="description">사우디 등에서 돈을 벌고 귀국한 파키스탄 사람들이 중산층으로 편입된 시기</span></div>
+
+<div class="item header header3"><h3 class="ui header">사다트와 이슬람주의자들의 결별</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1977년</span></span><span class="description">이집트에서 이슬람주의 학생 조직 이슬람 그룹이 이집트학생연맹의 다수를 점한 시기</span></div>
+<div class="item"><span class="head decade">1970년<span class="decade-suffix">대</span></span><span class="description">이집트 대학생의 수가 두 배로 늘어나 50만 명에 달함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1977년</span></span><span class="description">이슬람주의 세력과 <span>사다트</span>의 밀월 관계가 파탁나기 시작함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1977년</span></span><span class="description"><span>사다트</span> 정부의 경제 개방 정책에 반대하는 폭동이 일어남</span></div>
+<div class="item"><span class="head month"><span class="year-part">1977년</span> <span class="month-part">11월</span></span><span class="description">이스라엘과 평화협상을 위해 예루살렘 방문</span></div>
+<div class="item"><span class="head decade period period-decade inexact period-from">1970년<span class="decade-suffix">대</span> <span class="inexact-suffix">중반</span><span class="period-suffix">부터</span></span><span class="description">지하드주의에 경도된 학생과 지식인들은 자와히리가 가담한 지하 조직 알 지하드의 깃발을 중심으로 모여듦</span></div>
+
+<div class="item header header2"><h2 class="ui header">4 아프가니스탄 전쟁의 전야</h2></div>
+
+<div class="item"><span class="head year"><span class="year-part">1977년</span></span><span class="description">아프가니스탄 전쟁 발발</span></div>
+
+<div class="item header header3"><h3 class="ui header">이란 시아파의 이슬람 혁명</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1977년</span></span><span class="description"><span>팔레비</span> 체제에 비판적인 이란의 지식인들은 정부를 비판하는 각종 회합과 활동을 시작함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1975년</span></span><span class="description">오일쇼크 뒤 유가가 12.5퍼센트가 떨어져 이란 경제를 어렵게 함</span></div>
+<div class="item"><span class="head year inexact">1976년 <span class="inexact-suffix">말</span></span><span class="description">미국에서 <span>지미 카터</span>가 대통령으로 당선됨</span></div>
+<div class="item"><span class="head year"><span class="year-part">1977년</span></span><span class="description">이란의 반정부 지식인들이 일련의 반정부 활동을 개시함</span>
+- <span>테헤란의 봄</span>
+</div>
+<div class="item"><span class="head year"><span class="year-part">1964년</span></span><span class="description"><span>아야톨라 호메이니</span>가 해외로 망명</span></div>
+<div class="item"><span class="head year"><span class="year-part">1978년</span></span><span class="description"><span>호메이니</span>에 반대하는 반정부 시위가 시작됨</span></div>
+<div class="item"><span class="head duration">40일째</span><span class="description">시위 시작 후 아제르바이잔의 타브리즈에서 유혈 시위가 일어난 날</span></div>
+<div class="item"><span class="head month"><span class="year-part">1978년</span> <span class="month-part">10월</span></span><span class="description"><span>호메이니</span>가 이슬람사회주의 지도자 <span>아볼하산 바니사드르</span>와 함께 파리에 감</span></div>
+<div class="item"><span class="head year inexact">1978년 <span class="inexact-suffix">말</span></span><span class="description"><span>호메이니</span>가 혁명의 목적을 선언</span></div>
+<div class="item"><span class="head period">12월 10~11일</span><span class="description">이란 전국에서샤 체제 타도 운동이 벌어짐 <br/>시아파가 <span>이맘 후세인</span>의 순교를 추모하는 무하람 달의 아홉 번째, 열 번째 날. </span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">1월</span> <span class="date-part">16일</span></span><span class="description"><span>팔레비</span>가 이란을 떠남</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">2월</span> <span class="date-part">1일</span></span><span class="description"><span>호메이니</span> 귀국</span></div>
+<div class="item"><span class="head month"><span class="year-part">1979년</span> <span class="month-part">3월</span></span><span class="description">이슬람 공화국을 승인하는 국민투표가 승인됨</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">4일</span></span><span class="description">테헤란의 <span>미국 대사관 인질 사건</span> 발발</span></div>
+<div class="item"><span class="head duration">1년 이상</span><span class="description">미국 대사관 인질 사건이 지속된 기간</span></div>
+
+<div class="item header header3"><h3 class="ui header">메카 대사원 점거 사태</h3></div>
+
+<div class="item"><span class="head period inexact">1978~1979년 <span class="inexact-suffix">겨울</span></span><span class="description">파리에 있던 호메이니의 추종자들이 기자들에게 사우디의 일을 예고</span></div>
+<div class="item"><span class="head duration">약 2주 뒤</span><span class="description"><span>미국 대사관 인질 사건</span>으로부터 <span>메카 대사원 점거 사태</span>가 벌어지기까지 걸린 기간</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">20일</span></span><span class="description"><span>메카 대사원 점거 사태</span> 발발</span></div>
+<div class="item"><span class="head duration">7일 만</span><span class="description">사원이 대부분 탈환되는 데 걸린 기간</span></div>
+<div class="item"><span class="head duration inexact">2주 이상</span><span class="description">묘지로 들어가 저항한 무장대원들이 버틴 기간</span></div>
+<div class="item"><span class="head duration">50년 전</span><span class="description">이크완이 사우디 왕가를 위기에 빠트렸던 때</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">21일</span></span><span class="description">이슬람의 구세주 마흐디가 모습을 드러낸다고 예언된 날. <br>(이슬람력으로 1400년의 새해 첫날)</span></div>
+<div class="item"><span class="head duration">250여 년 전부터</span><span class="description">사우디 왕가가 아라비아 내에서 두각을 드러내기 시작한 때</span></div>
+<div class="item"><span class="head duration">50년 전</span><span class="description">사우드 왕가의 세속권력과 와하비즘 이크완 세력이 전쟁을 벌인 때</span></div>
+<div class="item"><span class="head year"><span class="year-part">1965년</span></span><span class="description">사우디에 텔레비전이 처음 도입</span></div>
+<div class="item"><span class="head duration duration-years">10년 뒤</span><span class="description"><span>파이살</span> 국왕 저격</span></div>
+<div class="item"><span class="head date"><span class="year-part">1975년</span> <span class="month-part">3월</span> <span class="date-part">25일</span></span><span class="description"><span>파이살</span> 국왕 저격</span></div>
+
+<div class="item header header3"><h3 class="ui header">이슬라마바드 미국 대사관 방화 사건</h3></div>
+
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">21일</span></span><span class="description">파키스탄 이슬라마바드에서 <span>미국 대사관 방화 사건</span> 발발</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">4일</span></span><span class="description">이란 테헤란에서 <span>미국 대사관 점거 사태</span>가 일어남</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">4일</span> <span class="time-part">오후 4시</span></span><span class="description">파키스탄군 참모본부가 보낸 헬기가 나타나서 상황 파악에 나섬</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">4일</span> <span class="time-part">오후 6시 30분</span></span><span class="description">대사관 직원들이 해치를 열고 밖을 내다봤을 때 폭도들이 사라짐</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">3일</span></span><span class="description">사우리아라비아의 <span>메카 대사원 사태</span>가 있었음</span></div>
+
+<div class="item header header3"><h3 class="ui header">파키스탄의 근본주의적 이슬람주의</h3></div>
+
+<div class="item"><span class="head year"><span class="year-part">1971년</span></span><span class="description"><span>무함마드 알리 진나</span>가 동파키스탄 분리 독립을 지원한 인도와의 전쟁에서 패배</span></div>
+<div class="item"><span class="head year"><span class="year-part">1867년</span></span><span class="description">델리 북쪽 데오반드에 달룰 울룸 마드라스가 세워짐</span>
+- <span>데오반디즘</span>
+</div>
+<div class="item"><span class="head year"><span class="year-part">1947년</span></span><span class="description">파키스탄 독립</span></div>
+<div class="item"><span class="head year"><span class="year-part">1941년</span></span><span class="description"><span>아불 알라 마우두디</span>가 <span>자마트 에 이슬라미</span>를 창당</span></div>
+<div class="item"><span class="head year"><span class="year-part">1945년</span></span><span class="description">데오반디즘을 표방하는 정당인 <span>자미트 울레마 에 이슬람</span> 창당</span></div>
+
+<div class="item header header3"><h3 class="ui header">이슬람주의를 표방한 군사정부</h3></div>
+
+<div class="item"><span class="head month"><span class="year-part">1977년</span> <span class="month-part">7월</span></span><span class="description">파키스탄에서 <span>무함마다 지아 울 하크</span>의 쿠데타가 성공함</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">10월</span> <span class="date-part">21일</span></span><span class="description"><span>지아</span>가 파키스탄에 진정한 이슬람 질서를 세우고자 한다고 발표</span></div>
+<div class="item"><span class="head duration">1년 전</span><span class="description"><span>지아</span>가 전통적 이슬람식 징벌을 승인</span></div>
+<div class="item"><span class="head year inexact">1979년 <span class="inexact-suffix">전후</span></span><span class="description">기존 법률들이 샤리아와 부합되는지 검증하기 시작</span></div>
+<div class="item"><span class="head duration">10년이 넘는</span><span class="description">지아의 통치 기간</span></div>
+<div class="item"><span class="head decade decade-from">1970년<span class="decade-suffix">대</span> 이후</span><span class="description">오일달러의 세례를 받은 사우리아라비아의 와하비즘 전도로 파키스탄의 마드라서 건립과 운영 붐이 증폭됨</span></div>
+<div class="item"><span class="head decade inexact">1970년<span class="decade-suffix">대</span> <span class="inexact-suffix">말</span></span><span class="description"><span>자마트 에 이슬라미</span>의 학생 조직이 주요 대학교에서 사회주의 성향의 학생운동을 밀어냄</span></div>
+<div class="item"><span class="head year"><span class="year-part">1979년</span></span><span class="description">이란 이슬람 혁명이 일어나 수니파 근본주의 성향 대학생들을 격동하게 함</span></div>
+<div class="item"><span class="head date"><span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">5일</span></span><span class="description">콰이드이아잠 대학이 있는 이슬라마바드 외교 단지의 이란 대사관은 지하드를 촉구하는 현수막으로 둘러쳐짐</span></div>
+<div class="item"><span class="head duration">2주 뒤</span><span class="description">현수막에 자극된 자마트 계열 이슬람주의 학생들이 미국 대사관을 습격함</span></div>
+<div class="item"><span class="head year"><span class="year-part">1979년</span></span><span class="description">이슬람권 전역에서 이슬람주의가 들끓으며 이슬람 세계를 연이어 사건들이 강타함</span></div>
+</div>
+
+</div>
+
+</body>
+</html>
