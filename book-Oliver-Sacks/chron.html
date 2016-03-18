@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+<head>
+    <title>올리버 색스 연표</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/locale/ko.js"></script>
+
+<style>
+
+.ui.container {
+    margin-bottom: 15px;
+    margin-top: 3px;
+}
+
+
+.item.header1 {
+    margin: 0px -10px;
+}
+.item.header1 > h1 {
+    padding: 10px 0;
+}
+
+
+h2.ui.header {
+    text-align: right;
+    padding: 1.5rem 1rem 1rem 1rem;
+    margin: 0;
+    background-color: whitesmoke;
+}
+h3.ui.header {
+    text-align: center;
+}
+
+.ui.list.sorted .header1,
+.ui.list.sorted .header2,
+.ui.list.sorted .header3 {
+    display: none;
+}
+
+.ui.list {
+    margin-left: 10px;
+}
+
+.ui.list > .item {
+    font-size: 0.7rem;
+}
+.ui.list > .item.has-same-year-with-prev {
+}
+.ui.list > .item:not(.has-same-year-with-prev) {
+    border-top: 1px solid rgba(128,128,128, 0.3);
+}
+
+.ui.list > .item > .head {
+    display: inline-block;
+    font-size: 1.0rem;
+    width: 172px;
+    overflow: visible;
+    white-space: nowrap;
+}
+.ui.list > .item > .head .year-part {
+    display: inline-block;
+    width: 47.5px;
+    text-align: justify;
+}
+.ui.list > .item > .head .year-part.is-same-with-prev {
+    margin-top: -2px;
+    visibility: hidden;
+}
+.ui.list > .item > .head .year-part:not(.is-same-with-prev) {
+    margin-top: 5px;
+}
+.ui.list > .item > .head .month-part {
+    display: inline-block;
+    width: 26px;
+    font-size: 85%;
+    text-align: right;
+}
+.ui.list > .item > .head .date-part {
+    display: inline-block;
+    width: 24px;
+    font-size: 76%;
+    text-align: right;
+}
+.ui.list > .item > .head .time-part {
+    display: inline-block;
+    width: 24px;
+    font-size: 65%;
+    max-width: 64px;
+}
+
+.ui.list > .item > .head .inexact-suffix {
+    font-size: 80%;
+}
+.ui.list > .item > .head .period-suffix {
+    font-size: 80%;
+}
+.ui.list > .item > .head .decade-suffix {
+    font-size: 80%;
+}
+
+/*
+.ui.list > .item:not(.date):not(.month):not(.year) {
+    display: none;
+}
+*/
+.ui.list > .item.duration {
+    display: none;
+}
+
+.ui.list > .item > .description {
+    display: inline-block;
+    padding-left: 1rem;
+    color: #999;
+}
+.ui.list > .item > .description > span {
+    text-decoration: underline;
+}
+
+.ui.list > .item:hover {
+    background-color: whitesmoke;
+}
+
+
+/*
+ *
+ */
+
+#content .item div {
+    display: inline-block;
+}
+#content .item .date {
+    min-width: 53px;
+}
+#content .item .content {
+    font-size: 0.9rem;
+}
+    #content .item .content a {
+        color: inherit;
+    }
+    #content .item .content .book {
+        font-weight: bold;
+    }
+        #content .item .content .book:before { content:" <"; }
+        #content .item .content .book:after { content:"> "; }
+
+#content .item .category {
+    margin-left: 1rem;
+    font-size: 0.7rem;
+    color: #aaa;
+    float: right;
+}
+#content .item .category:before {
+    content: "#";
+}
+
+</style>
+
+
+<script>
+
+
+function prerender(checkedModel) {
+    console.log('prerender.', checkedModel);
+
+    var $content = $('#content');
+    var $items = $('li').each(function(i, el) {
+        var $el = $('<div class="ui item">' + el.innerHTML + '</div>');
+        var category = $el.find('.category').text() || 'etc';
+
+        //
+        $content.append($el);
+        $(el).remove();
+    });
+}
+function render(checkedModel) {
+    console.log('render.', checkedModel);
+
+    var $content = $('#content');
+    var $items = $content.find('> .ui.item').each(function(i, el) {
+        var $el = $('<div class="ui item">' + el.innerHTML + '</div>');
+
+        var category = $el.find('.category').text() || 'etc';
+        //console.log(category, checkedModel[category]);
+        if (checkedModel[category]) { $el.show(); }
+        else                        { $el.hide(); }
+
+        //
+        $content.append($el);
+        $(el).remove();
+    });
+}
+
+// main
+$(function() {
+    var checkedModel = {
+        Publication: true,
+        Career: true,
+        Honour: true,
+        etc: true,
+    };
+    prerender(checkedModel);
+
+    // checkbox
+    (function(checkedModel) {
+        $('.list .child.checkbox').checkbox({
+            // Fire on load to set parent value
+            fireOnInit : true,
+            // Change parent state on each child checkbox change
+            onChange: function() {
+                var $listGroup      = $(this).closest('.list'),
+                    $parentCheckbox = $listGroup.closest('.item').children('.checkbox'),
+                    $checkbox       = $listGroup.find('.checkbox'),
+                    allChecked      = true,
+                    allUnchecked    = true
+                ;
+
+                // check to see if all other siblings are checked or unchecked
+                $checkbox.each(function() {
+                    if( $(this).checkbox('is checked') ) { allUnchecked = false; }
+                    else                                 { allChecked   = false; }
+                });
+
+                // set parent checkbox state, but dont trigger its onChange callback
+                if (allChecked)       { $parentCheckbox.checkbox('set checked'); }
+                else if(allUnchecked) { $parentCheckbox.checkbox('set unchecked'); }
+                else                  { $parentCheckbox.checkbox('set indeterminate'); }
+            },
+            onChecked: function() {
+                console.log('check.', $(this).checkbox('is checked'));
+                var isChecked = true;
+                var name = $(this).attr('name');
+                checkedModel[name] = isChecked;
+                render(checkedModel);
+            },
+            onUnchecked: function() {
+                console.log('uncheck.', $(this).checkbox('is checked'));
+                var isChecked = false;
+                var name = $(this).attr('name');
+                checkedModel[name] = isChecked;
+                render(checkedModel);
+            },
+
+        });
+        // master checkbox
+        $('.ui.master.checkbox').checkbox({
+            // check all children
+            onChecked: function() {
+                var $childCheckbox  = $(this).closest('.item').find('.child-checkbox.list').find('.checkbox');
+                    $childCheckbox.checkbox('check');
+            },
+            // uncheck all children
+            onUnchecked: function() {
+                var $childCheckbox  = $(this).closest('.item').find('.child-checkbox.list').find('.checkbox');
+                    $childCheckbox.checkbox('uncheck');
+            }
+        });
+        
+    })(checkedModel);
+
+});
+    </script>
+</head>
+<body>
+<div class="ui container">
+
+    <div>
+        <div class="ui celled relaxed list">
+            <div class="item">
+                <div class="ui master checkbox">
+                    <input type="checkbox" name="all"> <label>전체선택</label>
+                </div>
+                <div style="margin-left: 2rem;">
+                    <div class="ui horizontal child-checkbox list">
+                        <div class="item"><div class="ui child checkbox">
+                            <input type="checkbox" name="Career" checked> <label>Career</label> </div> </div>
+                        <div class="item"><div class="ui child checkbox">
+                            <input type="checkbox" name="Publication" checked> <label>Publication</label> </div> </div>
+                        <div class="item"><div class="ui child checkbox">
+                            <input type="checkbox" name="Honour" checked> <label>Honour</label> </div> </div>
+                        <div class="item"><div class="ui child checkbox">
+                            <input type="checkbox" name="etc" checked> <label>그 외</label> </div> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+
+    <div id="content" class="ui list">
+    </div>
+
+
+<ol><li><div class="date">1933.07.09</div><div class="content">출생</div></li><li><div class="date">1960</div><div class="content">런던 <a class="place">Middlesex Hospital</a>에서 인턴</div></li><li><div class="date">1960</div><div class="content">샌프란시스코의 <a class="place">Mount Zion Hospital</a>에서 인턴</div></li><li><div class="date">1960</div><div class="content">옥스퍼드 <a class="place">Queens College</a>에서 의학 학위 수여</div></li><li><div class="date">1965</div><div class="content">뉴욕 <a class="place">Albert Einstein College of Medicine</a>에서 연구원으로 근무</div><div class="category">Career</div></li><li><div class="date">1966.09</div><div class="content">뉴욕 <a class="place">Albert Einstein College of Medicine</a>에서 임상학자로 근무 (2007년까지)</div><div class="category">Career</div></li><li><div class="date">1966.10</div><div class="content"><a class="place">Beth Abraham Hospital</a>에서 임상학자로 근무</div><div class="category">Career</div></li><li><div class="date">1966</div><div class="content">뉴욕에서 <a class="organization">Little Sisters of the Poor </a>같은 여러 nursing home에서 neurological consultant로 일함</div><div class="category">Career</div></li><li><div class="date">1970</div><div class="content"><a class="book">Migraine (편두통)</a>출간</div><div class="category">Publication</div></li><li><div class="date">1973</div><div class="content"><a class="book">Awakenings (깨어남) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1973</div><div class="content"><a class="person">A. R. Luria</a>와 서신왕래 시작함 (~1977)</div></li><li><div class="date">1974</div><div class="content">노르웨이에서 다리 다침</div></li><li><div class="date">1984</div><div class="content"><a class="book">A Leg to Stand On (나는 침대에서 다리를 주웠다)</a>출간</div><div class="category">Publication</div></li><li><div class="date">1986</div><div class="content">연극 아내를 모자로 착각한 사나이, 마이클 니먼, 크리스토퍼 로렌스 상영</div></li><li><div class="date">1989</div><div class="content"><a class="book">Seeing Voices (목소리를 보았네) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1990</div><div class="content">영화 Awakenings (사랑의 기적) 개봉</div></li><li><div class="date">1995</div><div class="content"><a class="book">An Anthropologist on Mars (화성에서 온 인류학자) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1996</div><div class="content"><a class="organization">American Academy of Arts and Letters</a>의 회원이 됨</div><div class="category">Honour</div></li><li><div class="date">1997</div><div class="content"><a class="book">The Island of the Colorblind (색맹의 섬) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1999</div><div class="content"><a class="organization">New York Academy of Sciences</a>의 named fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">1999</div><div class="content"><a class="organization">Queen’s College</a>의 Honorary Fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">2001</div><div class="content"><a class="book">Uncle Tungsten (엉클 텅스텐) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2001</div><div class="content"><a class="organization">Rockefeller University</a>에서 Lewis Thomas Prize 수여</div><div class="category">Honour</div></li><li><div class="date">2002</div><div class="content"><a class="book">Oaxaca Journal (올리버 섹스의 오악사카 저널) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2002</div><div class="content"><a class="organization">American Academy of Arts and Sciences</a>의 Fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">2006</div><div class="content"><a>uveal melanoma(포도막 흑색종) </a>걸림</div></li><li><div class="date">2006</div><div class="content">책 The Echo Maker, Richard Powers이 출판됨</div></li><li><div class="date">2007</div><div class="content"><a class="book">Musicophilia (뮤지코필리아) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2007</div><div class="content"><a class="organization">Columbia University</a>에서 Columbia University Artist의 첫 교수가 됨 
+(영국 <a class="organization">University of Warwick</a>의 방문교수)</div><div class="category">Career</div></li><li><div class="date">2008</div><div class="content"><a class="person">Bill Hayes</a>와 교제 시작</div></li><li><div class="date">2008</div><div class="content">대영제국의 <a>Commander of the Order(CBE)</a>에 임명됨</div><div class="category">Honour</div></li><li><div class="date">2010</div><div class="content"><a class="book">The Mind’s Eye (마음의 눈) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2011</div><div class="content">영화 The Music Never Stopped 개봉</div></li><li><div class="date">2012</div><div class="content"><a class="book">Hallucinations (환각) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2012</div><div class="content"><a class="organization">New York University School of Medicine</a>에 신경학 교수로 부임</div><div class="category">Career</div></li><li><div class="date">2014</div><div class="content"><a>uveal melanoma</a>이 간과 뇌로 전이됨</div></li><li><div class="date">2015</div><div class="content"><a class="book">Gratitude </a>출간</div><div class="category">Publication</div></li><li><div class="date">2015</div><div class="content"><a class="book">On the Move (온 더 무브) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2015.08.30</div><div class="content">사망</div></li></ol><ul><li><div class="content"><a>Fellow of the Royal College of Physicians (FRCP)</a></div><div class="category">Honour</div></li><li><div class="content">결혼하지 않았고 대부분 독신으로 지냈다.</div></li><li><div class="content">거의 매일 수영을 했다.</div></li><li><div class="content"><a>실인증(prosopagnosia)</a>이 있다.</div></li></ul>
+    
+
+</div>
+
+</body>
+</html>
