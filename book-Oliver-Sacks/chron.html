@@ -38,12 +38,6 @@ h3.ui.header {
     text-align: center;
 }
 
-.ui.list.sorted .header1,
-.ui.list.sorted .header2,
-.ui.list.sorted .header3 {
-    display: none;
-}
-
 .ui.list {
     margin-left: 10px;
 }
@@ -51,65 +45,7 @@ h3.ui.header {
 .ui.list > .item {
     font-size: 0.7rem;
 }
-.ui.list > .item.has-same-year-with-prev {
-}
-.ui.list > .item:not(.has-same-year-with-prev) {
-    border-top: 1px solid rgba(128,128,128, 0.3);
-}
 
-.ui.list > .item > .head {
-    display: inline-block;
-    font-size: 1.0rem;
-    width: 172px;
-    overflow: visible;
-    white-space: nowrap;
-}
-.ui.list > .item > .head .year-part {
-    display: inline-block;
-    width: 47.5px;
-    text-align: justify;
-}
-.ui.list > .item > .head .year-part.is-same-with-prev {
-    margin-top: -2px;
-    visibility: hidden;
-}
-.ui.list > .item > .head .year-part:not(.is-same-with-prev) {
-    margin-top: 5px;
-}
-.ui.list > .item > .head .month-part {
-    display: inline-block;
-    width: 26px;
-    font-size: 85%;
-    text-align: right;
-}
-.ui.list > .item > .head .date-part {
-    display: inline-block;
-    width: 24px;
-    font-size: 76%;
-    text-align: right;
-}
-.ui.list > .item > .head .time-part {
-    display: inline-block;
-    width: 24px;
-    font-size: 65%;
-    max-width: 64px;
-}
-
-.ui.list > .item > .head .inexact-suffix {
-    font-size: 80%;
-}
-.ui.list > .item > .head .period-suffix {
-    font-size: 80%;
-}
-.ui.list > .item > .head .decade-suffix {
-    font-size: 80%;
-}
-
-/*
-.ui.list > .item:not(.date):not(.month):not(.year) {
-    display: none;
-}
-*/
 .ui.list > .item.duration {
     display: none;
 }
@@ -138,13 +74,24 @@ h3.ui.header {
 #content .item .date {
     min-width: 53px;
 }
+    #content .item .date.empty:before {
+        content: "그 외";
+    }
 #content .item .content {
     font-size: 0.9rem;
 }
     #content .item .content a {
         color: inherit;
     }
+        #content .item .content a:hover {
+            text-decoration: underline;
+        }
+    #content .item .content .place {
+        color: #999;
+    }
+
     #content .item .content .book {
+        color: inherit;
         font-weight: bold;
     }
         #content .item .content .book:before { content:" <"; }
@@ -167,11 +114,15 @@ h3.ui.header {
 
 
 function prerender(checkedModel) {
-    console.log('prerender.', checkedModel);
+    //console.log('prerender.', checkedModel);
 
     var $content = $('#content');
     var $items = $('li').each(function(i, el) {
         var $el = $('<div class="ui item">' + el.innerHTML + '</div>');
+        if ($el.find('.date').length === 0) {
+            $el.prepend('<div class="empty date" />');
+        }
+
         var category = $el.find('.category').text() || 'etc';
 
         //
@@ -180,7 +131,7 @@ function prerender(checkedModel) {
     });
 }
 function render(checkedModel) {
-    console.log('render.', checkedModel);
+    //console.log('render.', checkedModel);
 
     var $content = $('#content');
     var $items = $content.find('> .ui.item').each(function(i, el) {
@@ -298,8 +249,8 @@ $(function() {
     </div>
 
 
-<ol><li><div class="date">1933.07.09</div><div class="content">출생</div></li><li><div class="date">1960</div><div class="content">런던 <a class="place">Middlesex Hospital</a>에서 인턴</div></li><li><div class="date">1960</div><div class="content">샌프란시스코의 <a class="place">Mount Zion Hospital</a>에서 인턴</div></li><li><div class="date">1960</div><div class="content">옥스퍼드 <a class="place">Queens College</a>에서 의학 학위 수여</div></li><li><div class="date">1965</div><div class="content">뉴욕 <a class="place">Albert Einstein College of Medicine</a>에서 연구원으로 근무</div><div class="category">Career</div></li><li><div class="date">1966.09</div><div class="content">뉴욕 <a class="place">Albert Einstein College of Medicine</a>에서 임상학자로 근무 (2007년까지)</div><div class="category">Career</div></li><li><div class="date">1966.10</div><div class="content"><a class="place">Beth Abraham Hospital</a>에서 임상학자로 근무</div><div class="category">Career</div></li><li><div class="date">1966</div><div class="content">뉴욕에서 <a class="organization">Little Sisters of the Poor </a>같은 여러 nursing home에서 neurological consultant로 일함</div><div class="category">Career</div></li><li><div class="date">1970</div><div class="content"><a class="book">Migraine (편두통)</a>출간</div><div class="category">Publication</div></li><li><div class="date">1973</div><div class="content"><a class="book">Awakenings (깨어남) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1973</div><div class="content"><a class="person">A. R. Luria</a>와 서신왕래 시작함 (~1977)</div></li><li><div class="date">1974</div><div class="content">노르웨이에서 다리 다침</div></li><li><div class="date">1984</div><div class="content"><a class="book">A Leg to Stand On (나는 침대에서 다리를 주웠다)</a>출간</div><div class="category">Publication</div></li><li><div class="date">1986</div><div class="content">연극 아내를 모자로 착각한 사나이, 마이클 니먼, 크리스토퍼 로렌스 상영</div></li><li><div class="date">1989</div><div class="content"><a class="book">Seeing Voices (목소리를 보았네) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1990</div><div class="content">영화 Awakenings (사랑의 기적) 개봉</div></li><li><div class="date">1995</div><div class="content"><a class="book">An Anthropologist on Mars (화성에서 온 인류학자) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1996</div><div class="content"><a class="organization">American Academy of Arts and Letters</a>의 회원이 됨</div><div class="category">Honour</div></li><li><div class="date">1997</div><div class="content"><a class="book">The Island of the Colorblind (색맹의 섬) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1999</div><div class="content"><a class="organization">New York Academy of Sciences</a>의 named fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">1999</div><div class="content"><a class="organization">Queen’s College</a>의 Honorary Fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">2001</div><div class="content"><a class="book">Uncle Tungsten (엉클 텅스텐) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2001</div><div class="content"><a class="organization">Rockefeller University</a>에서 Lewis Thomas Prize 수여</div><div class="category">Honour</div></li><li><div class="date">2002</div><div class="content"><a class="book">Oaxaca Journal (올리버 섹스의 오악사카 저널) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2002</div><div class="content"><a class="organization">American Academy of Arts and Sciences</a>의 Fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">2006</div><div class="content"><a>uveal melanoma(포도막 흑색종) </a>걸림</div></li><li><div class="date">2006</div><div class="content">책 The Echo Maker, Richard Powers이 출판됨</div></li><li><div class="date">2007</div><div class="content"><a class="book">Musicophilia (뮤지코필리아) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2007</div><div class="content"><a class="organization">Columbia University</a>에서 Columbia University Artist의 첫 교수가 됨 
-(영국 <a class="organization">University of Warwick</a>의 방문교수)</div><div class="category">Career</div></li><li><div class="date">2008</div><div class="content"><a class="person">Bill Hayes</a>와 교제 시작</div></li><li><div class="date">2008</div><div class="content">대영제국의 <a>Commander of the Order(CBE)</a>에 임명됨</div><div class="category">Honour</div></li><li><div class="date">2010</div><div class="content"><a class="book">The Mind’s Eye (마음의 눈) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2011</div><div class="content">영화 The Music Never Stopped 개봉</div></li><li><div class="date">2012</div><div class="content"><a class="book">Hallucinations (환각) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2012</div><div class="content"><a class="organization">New York University School of Medicine</a>에 신경학 교수로 부임</div><div class="category">Career</div></li><li><div class="date">2014</div><div class="content"><a>uveal melanoma</a>이 간과 뇌로 전이됨</div></li><li><div class="date">2015</div><div class="content"><a class="book">Gratitude </a>출간</div><div class="category">Publication</div></li><li><div class="date">2015</div><div class="content"><a class="book">On the Move (온 더 무브) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2015.08.30</div><div class="content">사망</div></li></ol><ul><li><div class="content"><a>Fellow of the Royal College of Physicians (FRCP)</a></div><div class="category">Honour</div></li><li><div class="content">결혼하지 않았고 대부분 독신으로 지냈다.</div></li><li><div class="content">거의 매일 수영을 했다.</div></li><li><div class="content"><a>실인증(prosopagnosia)</a>이 있다.</div></li></ul>
+<ol><li><div class="date">1933.07.09</div><div class="content">출생</div></li><li><div class="date">1960</div><div class="content">런던 <a class="place">Middlesex Hospital</a>에서 인턴</div></li><li><div class="date">1960</div><div class="content">샌프란시스코의 <a class="place">Mount Zion Hospital</a>에서 인턴</div></li><li><div class="date">1960</div><div class="content">옥스퍼드 <a class="place">Queens College</a>에서 의학 학위 수여</div></li><li><div class="date">1965</div><div class="content">뉴욕 <a class="place">Albert Einstein College of Medicine</a>에서 연구원으로 근무</div><div class="category">Career</div></li><li><div class="date">1966.09</div><div class="content">연구원에서 임상학자로 전환함</div><div class="category">Career</div></li><li><div class="date">1966.10</div><div class="content"><a class="place">Beth Abraham Hospital</a>에서 임상학자로 근무</div><div class="category">Career</div></li><li><div class="date">1966</div><div class="content">뉴욕에서 <a class="organization">Little Sisters of the Poor </a>같은 여러 nursing home에서 neurological consultant로 일함</div><div class="category">Career</div></li><li><div class="date">1970</div><div class="content"><a class="book">Migraine (편두통)</a>출간</div><div class="category">Publication</div></li><li><div class="date">1973</div><div class="content"><a class="book">Awakenings (깨어남) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1973</div><div class="content"><a class="person">A. R. Luria</a>와 서신왕래 시작함 (~1977)</div></li><li><div class="date">1974</div><div class="content">노르웨이에서 다리 다침</div></li><li><div class="date">1984</div><div class="content"><a class="book">A Leg to Stand On (나는 침대에서 다리를 주웠다)</a>출간</div><div class="category">Publication</div></li><li><div class="date">1986</div><div class="content">연극 아내를 모자로 착각한 사나이, 마이클 니먼, 크리스토퍼 로렌스 상영</div></li><li><div class="date">1989</div><div class="content"><a class="book">Seeing Voices (목소리를 보았네) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1990</div><div class="content">영화 <a class="movie">Awakenings (사랑의 기적) </a>개봉</div></li><li><div class="date">1995</div><div class="content"><a class="book">An Anthropologist on Mars (화성에서 온 인류학자) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1996</div><div class="content"><a class="organization">American Academy of Arts and Letters</a>의 회원이 됨</div><div class="category">Honour</div></li><li><div class="date">1997</div><div class="content"><a class="book">The Island of the Colorblind (색맹의 섬) </a>출간</div><div class="category">Publication</div></li><li><div class="date">1999</div><div class="content"><a class="organization">New York Academy of Sciences</a>의 named fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">1999</div><div class="content"><a class="organization">Queen’s College</a>의 Honorary Fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">2001</div><div class="content"><a class="book">Uncle Tungsten (엉클 텅스텐) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2001</div><div class="content"><a class="organization">Rockefeller University</a>에서 Lewis Thomas Prize 수여</div><div class="category">Honour</div></li><li><div class="date">2002</div><div class="content"><a class="book">Oaxaca Journal (올리버 섹스의 오악사카 저널) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2002</div><div class="content"><a class="organization">American Academy of Arts and Sciences</a>의 Fellow가 됨</div><div class="category">Honour</div></li><li><div class="date">2006</div><div class="content"><a>uveal melanoma(포도막 흑색종) </a>걸림</div></li><li><div class="date">2006</div><div class="content">책 <a class="book">The Echo Maker, Richard Powers</a>이 출판됨</div></li><li><div class="date">2007</div><div class="content"><a class="book">Musicophilia (뮤지코필리아) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2007</div><div class="content"><a class="organization">Columbia University</a>에서 Columbia University Artist의 첫 교수가 됨 
+(영국 <a class="organization">University of Warwick</a>의 방문교수)</div><div class="category">Career</div></li><li><div class="date">2008</div><div class="content"><a class="person">Bill Hayes</a>와 교제 시작</div></li><li><div class="date">2008</div><div class="content">대영제국의 <a>Commander of the Order(CBE)</a>에 임명됨</div><div class="category">Honour</div></li><li><div class="date">2010</div><div class="content"><a class="book">The Mind’s Eye (마음의 눈) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2011</div><div class="content">영화 <a class="movie">The Music Never Stopped </a>개봉</div></li><li><div class="date">2012</div><div class="content"><a class="book">Hallucinations (환각) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2012</div><div class="content"><a class="organization">New York University School of Medicine</a>에 신경학 교수로 부임</div><div class="category">Career</div></li><li><div class="date">2014</div><div class="content"><a>uveal melanoma</a>이 간과 뇌로 전이됨</div></li><li><div class="date">2015</div><div class="content"><a class="book">Gratitude </a>출간</div><div class="category">Publication</div></li><li><div class="date">2015</div><div class="content"><a class="book">On the Move (온 더 무브) </a>출간</div><div class="category">Publication</div></li><li><div class="date">2015.08.30</div><div class="content">사망</div></li></ol><ul><li><div class="content"><a>Fellow of the Royal College of Physicians (FRCP)</a></div><div class="category">Honour</div></li><li><div class="content">결혼하지 않았고 대부분 독신으로 지냈다.</div></li><li><div class="content">거의 매일 수영을 했다.</div></li><li><div class="content"><a>실인증(prosopagnosia)</a>이 있다.</div></li></ul>
     
 
 </div>
