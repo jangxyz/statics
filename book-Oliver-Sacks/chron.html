@@ -74,6 +74,37 @@ h3.ui.header {
  *
  */
 
+.checkbox-box {
+    font-size: 0.8rem;
+}
+.checkbox-box .ui.checkbox .box, .ui.checkbox label {
+    font-size: 0.8rem;
+}
+.checkbox-box .child-checkbox-box {
+    margin-left: 0px;
+    position: relative;
+}
+    .checkbox-box .child-checkbox.ui.horizontal.list {
+        position: relative;
+        width: 100%;
+    }
+    .checkbox-box .child-checkbox > .item {
+        max-width: 24%;
+        overflow-x: hidden;
+    }
+        .checkbox-box .child-checkbox.ui.horizontal.list > .item {
+            margin-left: 0px;
+        }
+
+/*
+ *
+ */
+
+#content .item.death {
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
 #content .item div {
     display: inline-block;
 }
@@ -100,7 +131,13 @@ h3.ui.header {
 #content .item .content {
     font-size: 1.0rem;
     color: #333;
+
+    width: 95%;
+    width: calc(100%-53px);
+    width: -webkit-calc(100% - 53px); /* for Chrome, Safari */
+    width:    -moz-calc(100% - 53px); /* for Firefox */
 }
+
     #content .item .content .parenthesized {
         font-size: 0.9rem;
     }
@@ -112,7 +149,7 @@ h3.ui.header {
         #content .item .content a:hover * { text-decoration: underline; }
 
     #content .item .content .place {
-        color: #999;
+        color: #666;
     }
 
     #content .item .content .book {
@@ -134,13 +171,33 @@ h3.ui.header {
         #content .item .content .play:after { content:"> "; }
 
 #content .item .category {
-    margin-left: 1rem;
+    margin-top: -10px;
     font-size: 0.7rem;
     color: #aaa;
     float: right;
 }
 #content .item .category:before {
     content: "#";
+}
+
+@media screen and (max-width: 640px) {
+    #content .item .content {
+        font-size: 0.8rem;
+    }
+    #content .item .content .parenthesized {
+        font-size: 0.7rem;
+    }
+    #content .item .content a {
+        font-size: 0.75rem;
+        color: inherit;
+    }
+    #content .item .date {
+        font-size: 0.7rem;
+    }
+    #content .item .category {
+        font-size: 0.65rem;
+        margin-top: -5px;
+    }
 }
 
 </style>
@@ -209,6 +266,11 @@ function render(checkedModel) {
             var $checkbox = $('.ui.checkbox input:checkbox[name="' + category + '"]').closest('.checkbox');
             $checkbox.checkbox('uncheck');
         });
+
+        // death
+        if ($el.find('.content').text() === "사망") {
+            $el.addClass('death');
+        }
 
         //
         $content.append($el);
@@ -285,13 +347,13 @@ $(function() {
 <div class="ui container">
 
     <div>
-        <div class="ui celled relaxed list">
+        <div class="checkbox-box ui celled relaxed list ">
             <div class="item">
                 <div class="ui master checkbox">
                     <input type="checkbox" name="all"> <label>전체선택</label>
                 </div>
-                <div style="margin-left: 2rem;">
-                    <div class="ui horizontal child-checkbox list">
+                <div class="child-checkbox-box" >
+                    <div class="ui horizontal child-checkbox list tiny">
                         <div class="item"><div class="ui child checkbox">
                             <input type="checkbox" name="Career" checked> <label>Career</label> </div> </div>
                         <div class="item"><div class="ui child checkbox">
