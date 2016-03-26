@@ -1,0 +1,570 @@
+<!doctype html>
+<html>
+<head>
+    <title>신영복 담론 구절</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/locale/ko.js"></script>
+
+<style>
+
+.ui.container {
+    margin-bottom: 15px;
+    margin-top: 3px;
+}
+
+
+.item.header1 {
+    margin: 0px -10px;
+}
+.item.header1 > h1 {
+    padding: 10px 0;
+}
+
+
+h2.ui.header {
+    text-align: right;
+    padding: 1.5rem 1rem 1rem 1rem;
+    margin: 0;
+    background-color: whitesmoke;
+}
+h3.ui.header {
+    text-align: center;
+}
+
+.ui.list.sorted .header1,
+.ui.list.sorted .header2,
+.ui.list.sorted .header3 {
+    display: none;
+}
+
+.ui.list {
+    margin-left: 10px;
+}
+
+.ui.list > .item {
+    font-size: 0.90rem;
+    border-top: 1px solid rgba(128,128,128, 0.3);
+    padding-top: 7px;
+    padding-bottom: 7px;
+    line-height: 1.3rem;
+}
+
+.ui.list > .item > .head {
+    display: inline-block;
+    font-size: 1.0rem;
+    width: 172px;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+.ui.list > .item > .description {
+    display: inline-block;
+    padding-left: 1rem;
+    color: #999;
+}
+.ui.list > .item > .description > span {
+    text-decoration: underline;
+}
+
+.ui.list > .item:hover {
+    background-color: whitesmoke;
+}
+
+.english,
+.hanja {
+    color: #888;
+    font-size: 0.8rem;
+}
+.phrase {
+    text-decoration: underline;
+}
+
+</style>
+
+<script>
+
+var data = {
+    "1": [
+        "<span class='phrase'>생생불식<span class='hanja'>生生不息</span></span>. 끊임없이 변화하는 세상에서 온고<span class='hanja'>溫故</span>보다 창신<span class='hanja'>創新</span>이 여러분의 본령입니다.",
+    ],
+    "2": [
+        "「연암억선형」<span class='hanja'>燕巖憶先兄</span>: ‘연암에서 돌아가신 형님을 생각하며’라는 시입니다.",
+        "공자<span class='hanja'>孔子</span>도 <span class='phrase'>악여정통<span class='hanja'>樂與政通</span></span>이라 했습니다. 음악과 정치는 서로 통한다는 뜻입니다.",
+        "『논어』<span class='hanja'>論語</span> 「안연」<span class='hanja'>顔淵</span> 편에 <span class='phrase'>‘초상지풍필언’<span class='hanja'>草上之風必偃</span></span>이라는 말이 있습니다. 풀 위에 바람이 불면 풀은 필언<span class='hanja'>必偃</span>, 반드시 눕는다. 바람이 불면 청보리 밭의 보리가 눕습니다. 위정자들은 백성들을 풍화<span class='hanja'>風化</span>하기 위해서 시를 수집하고 시로써 백성들에게 다가갑니다. 위정자들이 백성들을 풍화하고 덕화<span class='hanja'>德化</span>한다고 하지만 백성들은 반대로 노래로써 풍자<span class='hanja'>諷刺</span>했습니다. 바람이 불면 물론 풀이 눕기는 하지만 그건 일시적입니다. 다시 일어섭니다. 그래서 ‘초상지풍필언’에 대구를 달고 있습니다. <span class='phrase'>‘수지풍중초부립’<span class='hanja'>誰知風中草復立</span></span>이라 풍자합니다. 수지<span class='hanja'>誰知</span>, 누가 알랴, 너는 모르지? 이런 뜻입니다. ‘바람 속(<span class='hanja'>風中</span>)에서도 풀이 다시 일어서는 걸(<span class='hanja'>復立</span>) 너희는 모르지?’라는 대구입니다. 김수영의 「풀」이라는 시가 있습니다. 풀이 바람보다 먼저 눕지만 바람보다 먼저 일어난다고 노래합니다. 아마 여기서 착상한 것인 듯합니다.",
+        "진달래꽃 “사뿐히 즈려밟고 가시옵소서”라는 절창이 바로 예이츠<span class='english'>William Butler Yeats</span>의 시에 있습니다. “<span class='phrase'>나는 가난하여 가진 것이 꿈뿐이어서 그 꿈을 그대 발밑에 깔았습니다. 사뿐히 밟으세요(<span class='english'>tread softly</span>). 당신이 밟는 것이 내 꿈이니까요.</span>”(<span class='english'>Yeats</span>, 「<span class='english'>He Wishes for the Cloths of Heaven</span>」)",
+    ],
+    "3": [
+        "<span class='phrase'>창랑지수청혜<span class='hanja'>滄浪之水淸兮</span> 가이탁오영<span class='hanja'>可以濯吾纓</span>, 창랑지수탁혜<span class='hanja'>滄浪之水濁兮</span> 가이탁오족<span class='hanja'>可以濯吾足</span></span>. “창랑의 물이 맑으면 갓끈을 씻고, 창랑의 물이 흐리면 발을 씻는다.” 명구로 회자되는 이 구절은 「어부」의 결론입니다.",
+        "어부가 굴원의 그러한 고고함에 대하여 <span class='phrase'>완이이소<span class='hanja'>莞爾而笑</span></span>, 빙그레 웃으면서 <span class='phrase'>고설이거<span class='hanja'>鼓枻而去</span></span>, 노〔<span class='hanja'>枻</span>〕 두드려 박자를 맞추며 부르는 노래가 바로 ‘창랑지수’입니다. “창랑의 물이 맑으면 갓끈을 씻고, 창랑의 물이 흐리면 발을 씻으면 되지”입니다.",
+        "자신의 지식을 꾸며서 어리석은 사람들을 모욕하고(<span class='phrase'><span class='hanja'>飾智而驚愚</span></span>) 자기의 행실을 닦는 것은 좋지만 그것으로 다른 사람의 허물을 드러나게 했다는 것입니다(<span class='phrase'><span class='hanja'>修身而明汚</span></span>).",
+    ],
+    "4": [
+        "<span class='phrase'>무왕불복<span class='hanja'>無往不復</span></span>, 가기만 하고 다시 반복되지 않는 과거란 없습니다.",
+        "공자가 <span class='phrase'>술이부작<span class='hanja'>述而不作</span></span>이라고 했습니다. 서술만 하고 창작하지 않는다고 했습니다.",
+        "『사기』 「태사공자서」<span class='hanja'>太史公自序</span>를 보면, <span class='phrase'>시<span class='hanja'>詩</span>는 풍<span class='hanja'>風</span>에 장<span class='hanja'>長</span></span>하다고 했습니다. 또 서<span class='hanja'>書</span>는 선왕의 행적을 기록한 것이기 때문에, 정<span class='hanja'>政</span> 즉 <span class='phrase'>정치에 장하다</span>고 했습니다. 장<span class='hanja'>長</span>하다는 것은 ‘뛰어나다’는 뜻입니다. 그러면 역<span class='hanja'>易</span>은 무엇에 장할까요? <span class='phrase'>변<span class='hanja'>變</span>에 장하다</span>고 합니다.",
+        "공자가 『주역』을 끈이 세 번 끊어질 때까지 읽었다고 합니다. <span class='phrase'>위편삼절<span class='hanja'>韋編三絶</span></span>입니다.",
+        "알튀세르<span class='english'>Louis Althusser</span>의 비유가 신랄합니다. “<span class='phrase'>히말라야 높은 설산에 사는 토끼가 가장 조심해야 하는 것이 무엇인가?</span>” 동상<span class='hanja'>凍傷</span>이 아니었습니다. “평지에 사는 코끼리보다 자기가 크다고 착각하지 않는 것”이었습니다.",
+        "상효의 효사에 내가 자주 소개하는 <span class='phrase'>석과불식<span class='hanja'>碩果不食</span></span>이 나옵니다. ‘씨 과실’〔<span class='hanja'>碩果</span>〕은 먹는 것이 아니라는 뜻입니다.",
+        "‘서로 감추어 준다’, <span class='phrase'>호장기택<span class='hanja'>互藏其宅</span></span>이라고 합니다. 그 집 안 깊숙이 서로 감추어 주고 있습니다. 그것도 불이 물을 감추고 있고, 물이 불을 감추고 있습니다.",
+        "<span class='phrase'>화수미제<span class='hanja'>火水未濟</span></span>괘입니다. 효사<span class='hanja'>爻辭</span>는 이렇습니다. “끝나지 않았다. 어린 여우가 강물을 거의 다 건넜는데 그만 꼬리를 적시고 말았다.” ",
+        "<span class='phrase'>유기미<span class='hanja'>濡其尾</span></span>, 꼬리를 적셨다는 것은 작은 실패가 있었다는 뜻입니다. ",
+        "<span class='phrase'>무유리<span class='hanja'>无攸利</span></span>, 이로울 바가 없다. ",
+        "<span class='phrase'>불속종야<span class='hanja'>不續終也</span></span>, 끝내지 못한다.",
+        "『주역』에서는 변화를 ‘<span class='phrase'>역이불역<span class='hanja'>易而不易</span> 불역이대역<span class='hanja'>不易而大易</span></span>’으로 요약합니다. “변하면서도 변하지 않는다. 바로 그 변하지 않는다는 것이 참다운 역(<span class='hanja'>大易</span>)이다”라는 뜻입니다. 그러나 이 구절을 다르게 해석하기도 합니다. “변하면서도 변하지 않는다. 그러나 그 변하지 않는 것도 크게 보면(<span class='hanja'>大</span>) 변한다(<span class='hanja'>易</span>).”",
+    ],
+    "5": [
+        "동<span class='hanja'>同</span>이라는 패권적 경영이 대세가 됩니다. 유가<span class='hanja'>儒家</span> 학파는 바로 이러한 패권 경영에 반대하고 제후국 연방제라는 주나라 모델을 지지합니다. 그것이 <span class='phrase'>화이부동<span class='hanja'>和而不同</span></span>입니다.",
+        "‘화동<span class='hanja'>和同</span> 담론’은 <span class='phrase'>군자화이부동<span class='hanja'>君子和而不同</span> 소인동이불화<span class='hanja'>小人同而不和</span></span>를 줄여서 붙인 이름입니다. 이 구절의 일반적 해석은 다음과 같습니다. “군자는 화목하되 부화뇌동하지 않으며, 소인은 동일함에도 불구하고 화목하지 못한다.”",
+        "유명한 <span class='phrase'>규구회맹<span class='hanja'>葵丘會盟</span></span> 이야기가 당시 사정을 잘 알려 줍니다. “군<span class='hanja'>君</span>이 군답지 못하고 신<span class='hanja'>臣</span>이 신답지 못해서 세상이 지금 이렇게 어지러운 것입니다.”",
+    ],
+    "6": [
+        "<span class='phrase'>인부지이불온<span class='hanja'>人不知而不慍</span> 불역군자호<span class='hanja'>不亦君子乎</span></span>, 사람들이 알아주지 않아도 노엽지 않다는 것은 현실 정치 영역으로부터 만세의 목탁으로 나아간 그의 심정을 술회한 것이지만 동시에 공자의 고단했던 당시의 삶을 엿보게도 합니다.",
+        "‘<span class='phrase'>광자진취<span class='hanja'>狂者進取</span> 견자유소불위<span class='hanja'>狷者有所不爲</span></span>’라고 했습니다. 뜻이 높고 작은 일에 거리낌이 없는 사람을 뜻합니다. 실제로 공자는 삼환<span class='hanja'>三桓</span>의 참주<span class='hanja'>僭主</span> 정치를 반대하다가 망명하게 됩니다.",
+        "자공이 정치를 물었습니다. <span class='phrase'>정치란 식<span class='hanja'>食</span>과 병<span class='hanja'>兵</span>과 신<span class='hanja'>信</span></span>의 세 가지라고 대답합니다. ",
+        "<span class='phrase'>무신불립<span class='hanja'>無信不立</span></span>, 백성의 신뢰가 없으면 나라가 존립할 수 없다고 합니다. ",
+        "공자는 인<span class='hanja'>仁</span>이란 ‘<span class='phrase'>근자열<span class='hanja'>近者說</span> 원자래<span class='hanja'>遠者來</span></span>’라고 합니다. 가까이 있는 사람이 기뻐하고 멀리 있는 사람이 찾아오는 것이 인이라고 했습니다. ",
+        "<span class='phrase'>절용애인<span class='hanja'>節用愛人</span></span>, 물건을 아껴 쓰고 사람들을 생각한다는 경우 애민<span class='hanja'>愛民</span>이 아닙니다. ",
+        "<span class='phrase'>사민이시<span class='hanja'>使民以時</span></span>, 백성을 부릴 때는 때 맞춰서 부려야 한다. 농사철인가 아닌가를 잘 봐서 부려야 한다고 했습니다. ",
+        "<span class='phrase'>군군신신<span class='hanja'>君君臣臣</span></span>, 임금은 임금답고 신하는 신하다워야 한다는 예론<span class='hanja'>禮論</span>은 공자의 보수적 사회론이기도 하지만 동시에 공자가 증오했던 참주 정치를 반대하는 광견의 개혁적 사상이기도 합니다. ",
+        "공자 어록에서 많이 알려진 명구입니다. <span class='phrase'>기소불욕물시어인<span class='hanja'>己所不欲勿施於人</span></span>, 자기가 원치 않는 것을 다른 사람에게 베풀지 마라. ",
+        "『사기』에 공자가 노자<span class='hanja'>老子</span>를 찾아가서 예<span class='hanja'>禮</span>에 관해서 질문하는 글이 있습니다. 노자의 대답이 사마천의 생각이라고 봐도 됩니다. 드러내 놓고 공자를 하시<span class='hanja'>下視</span>합니다. <span class='phrase'>‘양고심장약허’<span class='hanja'>良賈沈藏若虛</span></span> 양고<span class='hanja'>良賈</span>, 좋은 상인은 좋은 물건을 겉으로 드러내 놓지 않고 심장<span class='hanja'>沈藏</span>, 깊이 감춰 둔다. 약허<span class='hanja'>若虛</span>, 없는 듯이 하는 법이다. 그리고 교기<span class='hanja'>驕氣</span>, 다욕<span class='hanja'>多欲</span>, 태색<span class='hanja'>態色</span>, 음지<span class='hanja'>淫志</span>를 버리라고 충고합니다.",
+        "<span class='phrase'>맹지반<span class='hanja'>孟之反</span>은 불벌<span class='hanja'>不伐</span></span>, 자랑하지 않는다. <span class='phrase'>분이전<span class='hanja'>奔而殿</span>, 패주〔<span class='hanja'>奔</span>〕할 때는 늘 전<span class='hanja'>殿</span>한다</span>. 전<span class='hanja'>殿</span>이란 패주하는 대열의 후미에서 병사들을 수습하는 일입니다. 추격병에게 노출돼 있는 위험한 자리입니다. ",
+        "이윽고 성에 이르러 성문을 들어서면서 그제야 화살을 뽑아 말을 채찍질하며 하는 말이 <span class='phrase'>비감후야<span class='hanja'>非敢後也</span></span>, ‘내가 감히 위험한 후미에 뒤처지려고 하지 않았는데 말이 달리지 않아서 뒤처졌네’ 했다는 것입니다.",
+        "질이 문보다 승하면 야하고(<span class='phrase'><span class='hanja'>質勝文卽野</span></span>) 반대로 문이 질보다 승하면 사하다(<span class='phrase'><span class='hanja'>文勝質卽史</span></span>)고 합니다. 질<span class='hanja'>質</span>이란 바탕, 즉 내용입니다. ",
+        "<span class='phrase'>문질빈빈<span class='hanja'>文質彬彬</span> 연후군자<span class='hanja'>然後君子</span></span>, 문과 질이 빈빈<span class='hanja'>彬彬</span>해야, 잘 조화되어야 가히 군자라 할 것이다. ",
+        "“군자도 궁할 때가 있습니까?”(<span class='phrase'><span class='hanja'>君子亦有窮乎</span></span>) 자로의 노여운 질문에 대한 공자의 답변은 의외로 조용하고 간단합니다. “군자는 원래 궁한 법이라네.”(<span class='phrase'><span class='hanja'>君子固窮</span></span>) “소인은 궁하면 흐트러지는 법이지.”(<span class='phrase'><span class='hanja'>小人窮斯濫矣</span></span>)",
+    ],
+    "7": [
+        "맹자는 <span class='phrase'>맹모삼천지교<span class='hanja'>孟母三遷之敎</span></span>로 유명합니다.",
+        "곡속장<span class='hanja'>觳觫章</span>의 <span class='phrase'>‘이양역지’<span class='hanja'>以羊易之</span></span> 부분입니다. 양<span class='hanja'>羊</span>과 소를 바꾼 이야기입니다.",
+        "<span class='phrase'>인의예지<span class='hanja'>仁義禮智</span></span>가 맹자의 사단<span class='hanja'>四端</span>입니다. ",
+        "인<span class='hanja'>仁</span>은 <span class='phrase'>측은지심<span class='hanja'>惻隱之心</span></span>입니다. ",
+        "맹자가 강조한 의<span class='hanja'>義</span>가 <span class='phrase'>수오지심<span class='hanja'>羞惡之心</span></span>, 부끄러움〔<span class='hanja'>恥</span>〕입니다.",
+        "<span class='phrase'>인지성<span class='hanja'>人之性</span> 악<span class='hanja'>惡</span></span>, 인간의 본성은 악하다. ",
+        "<span class='phrase'>기선위야<span class='hanja'>其善僞也</span></span>, 인간의 행위가 선한 것은 위<span class='hanja'>僞</span>라는 것입니다. ",
+        "<span class='phrase'>학불가이이<span class='hanja'>學不可以已</span></span>로 시작하는 『순자』의 「권학편」<span class='hanja'>勸學篇</span>을 기억할 것입니다. 학문은 결코 중도포기할 수 없다. ",
+        "<span class='phrase'>청취지어람<span class='hanja'>靑取之於藍</span></span>, 청은 쪽으로부터 취한 것이지만 청어람<span class='hanja'>靑於藍</span>, 쪽보다 더 푸르고 ",
+        "<span class='phrase'>빙수위지<span class='hanja'>氷水爲之</span></span>, 얼음은 물이 얼어서 된 것이지만 한어수<span class='hanja'>寒於水</span>, 물보다 더 차다. 후학<span class='hanja'>後學</span>이 교육을 통해서 훨씬 더 뛰어날 수 있다는 것입니다. ",
+        "“바다를 본 사람은 물을 말하기 어려워한다.”(<span class='phrase'><span class='hanja'>觀於海者難爲水</span></span>) 큰 것을 깨달은 사람은 작은 것도 함부로 이야기하지 못한다는 뜻입니다. ",
+        "내가 이 구절을 <span class='phrase'>‘관해난수’<span class='hanja'>觀海難水</span></span>라고 4자로 성어<span class='hanja'>成語</span>해서 액자체로 썼습니다. ",
+        "시<span class='hanja'>詩</span> 강의 때 「어부」의 <span class='phrase'>‘창랑지수’<span class='hanja'>滄浪之水</span></span>를 읽었습니다. “창랑의 물이 맑으면 갓끈을 씻고, 창랑의 물이 흐리면 발을 씻는다.”",
+        "활을 쏘아서 과녁에 적중시키지 못했을 때는 자기를 이긴 사람을 원망하지 말고 부중<span class='hanja'>不中</span>, 적중하지 못한 원인을 자기한테서 찾아야 합니다. 유명한 <span class='phrase'>‘반구저기’<span class='hanja'>反求諸己</span></span>입니다. 부중의 원인을 자기에게서 찾아야 한다는 뜻입니다. 자기의 활 쏘는 자세를 먼저 반성해야 한다는 것입니다. ",
+        "<span class='phrase'>흉허복실<span class='hanja'>胸虛腹實</span></span>, 물 흐르듯 자연스러운 동작 등 궁술에는 기본적 자세와 마음가짐이 있습니다. 이러한 기본을 잘 지키고 있는가 아닌가를 스스로 돌이켜 반성해야 한다는 것입니다. 엄정한 자기반성의 자세입니다.",
+        "화살 만드는 사람은 그 화살이 사람을 상하게 하지 않을까봐 근심하고(<span class='phrase'><span class='hanja'>矢人惟恐不傷人</span></span>)",
+        "반대로 방패 만드는 사람은 사람이 상할까봐 근심한다(<span class='phrase'><span class='hanja'>函人惟恐傷人</span></span>).",
+        "무당과 관<span class='hanja'>棺</span> 만드는 사람도 마찬가지다(<span class='phrase'><span class='hanja'>巫匠亦然</span></span>). ",
+        "그래서 <span class='phrase'>술불가불신<span class='hanja'>術不可不愼</span></span>이라고 합니다. 술<span class='hanja'>術</span>이란 직업이나 생업을 뜻합니다. 생업을 신중하게 결정하지 않으면 안 된다는 것을 강조합니다. ",
+        "공자도 <span class='phrase'>성상근<span class='hanja'>性相近</span> 습상원<span class='hanja'>習相遠</span></span>, 본성은 비슷하지만 살아가는 동안에 점점 멀어진다고 했습니다. ",
+        "<span class='phrase'>이인위미<span class='hanja'>里仁爲美</span></span>, 인<span class='hanja'>仁</span>에 거하는 것이 아름답다고 하여 환경의 중요성을 승인하고 있습니다. ",
+        "순자는 더 철저합니다. <span class='phrase'>봉생마중<span class='hanja'>蓬生麻中</span> 불부이직<span class='hanja'>不扶而直</span></span>, 쑥이 삼밭에서 자라면 누가 붙잡아 주지 않아도 곧게 자란다는 뜻입니다.",
+    ],
+    "8": [
+        "<span class='phrase'>‘삼십폭공일곡’<span class='hanja'>三十輻共一轂</span></span>은 수레의 바퀴살 30개가 한 개의 홈통〔<span class='hanja'>轂</span>〕에 모여 있다는 뜻입니다. ",
+        "무<span class='hanja'>無</span>를 귀하게 여기는 <span class='phrase'>귀무론<span class='hanja'>貴無論</span></span>을 펼치고 있습니다. ",
+        "<span class='phrase'>선식이위기<span class='hanja'>埏埴以爲器</span> 당기무<span class='hanja'>當其無</span> 유기지용<span class='hanja'>有器之用</span></span>. 연<span class='hanja'>埏</span>은 흙을 반죽하는 것, 식<span class='hanja'>埴</span>은 찰흙입니다. 찰흙을 잘 반죽해서 이위기<span class='hanja'>以爲器</span>, 그릇으로 만드는데 당기무<span class='hanja'>當其無</span>, 그 비어 있음으로 해서 즉 그릇의 속이 비어 있음으로 해서 유기지용<span class='hanja'>有器之用</span>, 그릇으로서의 쓰임이 생긴다. ",
+        "<span class='phrase'>착호유<span class='hanja'>鑿戶牖</span> 이위실<span class='hanja'>以爲室</span> 당기무<span class='hanja'>當其無</span> 유실지용<span class='hanja'>有室之用</span></span>. 착<span class='hanja'>鑿</span>은 뚫다, 호<span class='hanja'>戶</span>는 문, 유<span class='hanja'>牖</span>는 창문입니다. 문과 창문을 뚫어서 이위실<span class='hanja'>以爲室</span>, 방으로 만드는데 당기무<span class='hanja'>當其無</span> 유실지용<span class='hanja'>有室之用</span>, 그 없음으로 해서 방으로서의 쓰임이 생긴다. ",
+        "<span class='phrase'>무<span class='hanja'>無</span>로써 관기묘<span class='hanja'>觀其妙</span></span>, 그 오묘한 것을 보아야 하고, <span class='phrase'>유<span class='hanja'>有</span>로써 관기요<span class='hanja'>觀其徼</span></span>, 드러난 것을 보아야 합니다.",
+        "‘<span class='phrase'>인법지<span class='hanja'>人法地</span> 지법천<span class='hanja'>地法天</span> 천법도<span class='hanja'>天法道</span> 도법자연<span class='hanja'>道法自然</span></span>’이라고 합니다. 사람은 땅을 본받고(<span class='hanja'>人法地</span>), 땅은 하늘을 본받고(<span class='hanja'>地法天</span>), 하늘은 도를 본받는다(<span class='hanja'>天法道</span>)는 것입니다. ",
+        "<span class='phrase'>대성약결<span class='hanja'>大成若缺</span></span>의 의미입니다. ‘최고의 완성은 마치 미완성인 듯하다.’ 이 경우의 대<span class='hanja'>大</span>는 최고란 뜻이며, 최고란 자연을 뜻하는 것임은 물론입니다. 최고의 완성(<span class='hanja'>大成</span>)은 마치 비어 있는(<span class='hanja'>缺</span>) 듯하다는 것입니다. ",
+        "자연이 그렇습니다. 그렇기 때문에 아무리 쓰더라도 닳는 법이 없습니다(<span class='phrase'><span class='hanja'>其用不弊</span></span>). ",
+        "<span class='phrase'>대영약충<span class='hanja'>大盈若沖</span> 기용불궁<span class='hanja'>其用不窮</span></span>, 가득 차 있지만 마치 비어 있는 것 같아서 떠내어 사용하더라도 다함이 없습니다. ",
+        "부어도 차지 않고 떠내어도 마르지 않는다(<span class='phrase'><span class='hanja'>注焉而不滿</span> <span class='hanja'>酌焉而不渴</span></span>)고 합니다. 획일적 형식이 없기 때문에 닳거나(<span class='hanja'>弊</span>) 다함(<span class='hanja'>窮</span>)이 없습니다.",
+        "<span class='phrase'>대직약굴<span class='hanja'>大直若屈</span></span>은 ‘최고의 곧음은 마치 굽은 것 같다’는 뜻입니다. ",
+        "왕필은 주에서 곧다는 것이 한 가지만 있는 것이 아니라고 합니다(<span class='phrase'><span class='hanja'>直不在一</span></span>). ",
+        "사물에 따라서 곧기 때문에(<span class='phrase'><span class='hanja'>隨物而直</span></span>) 굽은 듯이 보이기도 한다는 것입니다. ",
+        "<span class='phrase'>대교약졸<span class='hanja'>大巧若拙</span></span>입니다. 최고의 기교는 마치 졸렬한 것과 같다.",
+        "<span class='phrase'>무법불가<span class='hanja'>無法不可</span> 유법불가<span class='hanja'>有法不可</span></span>입니다. 법을 무시해서도 안 되고 법에 얽매여서도 안 됩니다.",
+        "<span class='phrase'>대변약눌<span class='hanja'>大辯若訥</span></span>도 같은 뜻입니다. 최고의 언변<span class='hanja'>言辯</span>은 마치 말을 더듬는 듯하다고 합니다. 눌<span class='hanja'>訥</span>은 말 더듬는다는 뜻입니다. 말을 잘한다는 것은 듣는 사람이 신뢰하게끔 하는 것이 최고입니다. 화려한 언어를 동원하거나 청산유수로 이야기하지 않더라도 자기의 말을 진정성 있게 받아들이게 하는 경우가 대변<span class='hanja'>大辯</span>임은 물론입니다. ",
+        "왕필은 자기가 지어내는 일이 없기 때문이라고 합니다(<span class='phrase'><span class='hanja'>己無所造</span></span>). 뜻을 자기 그릇에 담아서 건네지 않고 상대방의 그릇에 담는 것입니다. 이단을 만들어 내지 않는다는 뜻입니다. 더듬는다는 것은 말을 줄인다는 뜻입니다.",
+        "정승조<span class='hanja'>靜勝躁</span> 한승열<span class='hanja'>寒勝熱</span> <span class='phrase'>청정위천하정<span class='hanja'>淸靜爲天下正</span></span>입니다. 고요함이 조급함을 이기고 추위가 더위를 이깁니다. 맑고 고요한 것이 천하의 모습입니다. 이 경우 청<span class='hanja'>淸</span>은 ‘맑다’는 뜻이 아니라 인위가 개입되지 않은 상태입니다.",
+        "가장 먼저 강조하는 것이 말없이 가르쳐야 한다(<span class='phrase'><span class='hanja'>行不言之敎</span></span>)는 것입니다. ",
+        "이어서 간섭하지 말고(<span class='phrase'><span class='hanja'>不辭</span></span>), ",
+        "생산했더라도 소유하지 말고(<span class='phrase'><span class='hanja'>生而不有</span></span>), ",
+        "자랑하지 말고(<span class='phrase'><span class='hanja'>不恃</span></span>), ",
+        "공을 이루었더라도 그 공에 거하지 말 것(<span class='phrase'><span class='hanja'>弗居</span></span>)을 주장합니다. ",
+        "공로에 거하지 않음으로써 쫓겨나지 않는다(<span class='phrase'><span class='hanja'>不去</span></span>)는 것입니다.",
+        "‘<span class='phrase'>위무위<span class='hanja'>爲無爲</span> 무불치<span class='hanja'>無不治</span></span>’입니다. 위무위<span class='hanja'>爲無爲</span>, 이것은 무위를 강조하는 어법입니다. 무위로써 일한다는 뜻입니다. 그럼으로써 무불치<span class='hanja'>無不治</span>를 실현한다는 것입니다. ‘무불치’라는 표현에 주목해야 합니다. 무불치는 글자 그대로 ‘불치<span class='hanja'>不治</span>가 없다(<span class='hanja'>無</span>)’는 뜻입니다. ‘못 다스릴 것이(<span class='hanja'>不治</span>) 없다.’ 무위로써 다스리면 다스리지 못할 일이 없다는 적극적 의지의 표현입니다. ",
+        "첫째 <span class='phrase'>수선리만물<span class='hanja'>水善利萬物</span></span>입니다. 물은 만물을 이롭게 하기 때문입니다. 더 설명이 필요하지 않습니다. 물이 곧 생명입니다. ",
+        "둘째 <span class='phrase'>부쟁<span class='hanja'>不爭</span></span>입니다. 다투지 않기 때문입니다. 물은 다투지 않습니다. ",
+        "<span class='phrase'>유수부쟁선<span class='hanja'>流水不爭先</span></span>, 흐르는 물은 선두를 다투지 않습니다. 뿐만 아니라 산이 가로막으면 돌아가고 큰 바위를 만나면 몸을 나누어 지나갑니다. ",
+        "셋째 <span class='phrase'>처중인지소오<span class='hanja'>處衆人之所惡</span></span>입니다. 모든 사람이 싫어하는 곳에 처하기 때문에 <span class='phrase'>상선<span class='hanja'>上善</span></span>입니다. 싫어하는 곳이란 낮은 곳, 소외된 곳입니다. 물은 높은 곳으로 흐르는 법이 없습니다.",
+        "더욱 중요한 것은 이처럼 약하고 부드러운 물이 강한 것을 이긴다는 <span class='phrase'>유능제강<span class='hanja'>柔能制剛</span></span>의 메시지를 선포하고 있다는 사실입니다.",
+        "가장 과학적이기 때문에 <span class='phrase'>기어도<span class='hanja'>幾於道</span>, 도에 가깝습니다.</span> 도에 가깝다는 것은 오류가 없다(<span class='phrase'><span class='hanja'>故無尤</span></span>)는 뜻입니다.",
+        "<span class='phrase'>대국자하류<span class='hanja'>大國者下流</span> 천하지교<span class='hanja'>天下之交</span></span>. 노자가 이야기하는 대국<span class='hanja'>大國</span>은 바다입니다. 가장 낮은 곳에서 모든 나라들이 연대하는 평화로운 세상을 그려 보이고 있습니다. ",
+        "<span class='phrase'>빈상이정승모<span class='hanja'>牝常以靜勝牡</span> 이정위하<span class='hanja'>以靜爲下</span></span>. 대국은 암컷처럼 생명을 기르고 야욕<span class='hanja'>野慾</span>이 없는 허정한 모습으로 가장 낮은 곳에 처해야 한다는 뜻입니다. ",
+        "무기는 상서롭지 못한 것(<span class='phrase'><span class='hanja'>兵者不祥之器</span></span>)이며 평화로운 시대에는 잘 달리는 말이 밭을 갈고, 무도한 시대에는 전마가 전장에서 새끼를 낳는다(<span class='phrase'><span class='hanja'>天下有道</span> <span class='hanja'>却走馬以糞</span> <span class='hanja'>天下無道</span> <span class='hanja'>戎馬生於郊</span></span>)",
+    ],
+    "9": [
+        "기계는 수고를 덜어 주고 시간을 단축시키는 역할 즉 장자의 표현에 의하면 <span class='phrase'>‘기사’<span class='hanja'>機事</span></span>가 반드시 있습니다. 자공이 노인에게 이야기했던 기계의 장점이 바로 이 기사였습니다. 그러나 장자가 전개하는 반기계론은 그 기사 때문에 <span class='phrase'>‘기심’<span class='hanja'>機心</span></span>이 생긴다는 것입니다. 좀더 쉽게 하려는 마음이 생긴다는 것입니다. 마음속에 이러한 기심이 생기면 순수한 마음이 없어집니다(<span class='phrase'><span class='hanja'>純白不備</span></span>).",
+        "일을 쉽게 하려고 하고, 힘 들이지 않고 그리고 빨리 하려고 하는 이런 기심이 생기면 순수하지 못하게 됩니다. 그리고 <span class='phrase'>순백불비<span class='hanja'>純白不備</span>하면 신생부정<span class='hanja'>神生不定</span></span>이라고 했습니다. 신생<span class='hanja'>神生</span>은 생명력이란 뜻입니다. 생명력이되 정신적 측면에 방점이 있는 그런 의미라 할 수 있습니다. 이 생명력이 불안해진다(<span class='hanja'>不定</span>)는 것입니다. 정처<span class='hanja'>定處</span>를 얻지 못한다는 뜻입니다. ",
+        "생명력이 정처를 얻지 못하면 도를 실현할 수 없습니다(<span class='phrase'><span class='hanja'>道之所不載</span></span>). 이것이 장자의 반기계론입니다.",
+        "장자 사상의 핵심은 <span class='phrase'>‘탈정’<span class='hanja'>脫井</span></span>입니다. 갇혀 있는 우물에서 벗어나는 것입니다.",
+        "등산로는 미리 있는 것이 아니라 사람들이 다님으로써 만들어집니다(<span class='phrase'><span class='hanja'>道行之而成</span> <span class='hanja'>物謂之而然</span></span>).",
+        "『노자』 1장은 <span class='phrase'>도가도비상도<span class='hanja'>道可道非常道</span></span>로 시작됩니다. 도<span class='hanja'>道</span>와 무<span class='hanja'>無</span>의 존재성을 논하는 것입니다. ",
+        "『장자』 1장은 황당할 정도로 스케일이 장대합니다. <span class='phrase'>북해에 곤<span class='hanja'>鯤</span>이라는 물고기가 사는데, 그 등 길이가 몇 천 리인지 모른다. 그 고기가 하늘에 날아올라 새로 변하면 붕<span class='hanja'>鵬</span>이라 하는데 붕이 한번 날개를 펴면 그 크기가 몇 천 리인지 모른다. 밭두렁의 메추리가 하늘을 가로질러 날아가는 붕을 바라보며 어디로 무얼 하러 수고롭게 날아가느냐</span>고 합니다.",
+        "<span class='phrase'>선하지<span class='hanja'>善下之</span>, 부쟁<span class='hanja'>不爭</span></span>입니다. 물과 같은 진행 경로를 보여줍니다. ",
+        "『장자』의 경우 그것은 <span class='phrase'>이리화정<span class='hanja'>以理化情</span></span>입니다. 리<span class='hanja'>理</span>가 아닌 정<span class='hanja'>情</span>이라야 한다는 것입니다. ",
+        "장자가 중시하는 것은 무엇인가. 그것이 바로 ‘생명’입니다. <span class='phrase'>경물중생<span class='hanja'>輕物重生</span></span>입니다. 물<span class='hanja'>物</span>은 가볍고 생명이 중합니다. ",
+        "『맹자』의 <span class='phrase'>오십보소백보<span class='hanja'>五十步笑百步</span></span>의 예화도 마찬가지입니다. 전쟁터에서 50보 도망간 사람이 100보 도망간 사람을 비웃는다는 뜻입니다. ",
+        "급히 불을 켜서 갓난아기를 비추어 본 까닭은 <span class='phrase'>유공기사기야<span class='hanja'>唯恐其似己也</span></span>입니다. 그 아기가 혹시 자기를 닮았을까봐 두려워서였습니다. 자기를 닮지 않기를 바라는 간절한 모정입니다. 산모는 자기가 불구라는 사실을 통절하게 깨닫고 있었습니다.",
+    ],
+    "10": [
+        "<span class='phrase'>무감어수<span class='hanja'>無鑑於水</span></span>는 널리 알려진 글귀는 아닙니다. 내가 많이 소개하는 편입니다. 물에(<span class='hanja'>於水</span>) 비추어 보지 마라(<span class='hanja'>無鑑</span>)는 뜻입니다. 물〔<span class='hanja'>水</span>〕은 옛날에 거울이었습니다. 동경<span class='hanja'>銅鏡</span>이 나오기 전에는 물을 거울로 삼았습니다. 물에 비추어 보면 얼굴만 비추어 보게(<span class='hanja'>見面之容</span>) 됩니다. 그렇기 때문에 감어인<span class='hanja'>鑑於人</span>, 사람에게 비추어 보라고 하는 것입니다.",
+        "<span class='phrase'>불경어수<span class='hanja'>不鏡於水</span></span>로 되어 있습니다만 경<span class='hanja'>鏡</span>과 감<span class='hanja'>鑑</span>은 통용됩니다. 불경어수<span class='hanja'>不鏡於水</span>, 무감어수<span class='hanja'>無鑑於水</span> 같은 말입니다. ",
+        "<span class='phrase'>유묵지도속<span class='hanja'>儒墨之徒屬</span> 만천하<span class='hanja'>滿天下</span></span>, 유가와 묵가의 무리가 천하에 가득 찼다고 할 정도로 묵자가 그 당시는 대세였습니다. ",
+        "백성들이 두려워하지 않을 때야말로 진정한 위기라고 합니다(<span class='phrase'><span class='hanja'>民不畏威</span> <span class='hanja'>則大威至</span></span>).",
+        "묵가 사상의 핵심은 그 편명에서 잘 나타납니다. <span class='phrase'>「상현」<span class='hanja'>尙賢</span>, 「상동」<span class='hanja'>尙同</span>, 「겸애」<span class='hanja'>兼愛</span></span> 등이 그것입니다. ",
+        "「상현」이라는 것은 신분에 관계없이 현자를 천자로 모신다는 사상입니다. ",
+        "「상동」은 모든 사람들을 평등하게 대하는 것입니다. ",
+        "천명<span class='hanja'>天命</span>이란 없다. 그것은 폭군이 만든 것이다(<span class='phrase'><span class='hanja'>命者暴王作之</span></span>). ",
+        "<span class='phrase'>석불가난<span class='hanja'>孔席不暇暖</span> 묵돌부득검<span class='hanja'>墨突不得黔</span></span>. 공자의 방석은 따뜻할 새가 없고, 묵자의 집은 굴뚝에 검댕이 없다는 뜻입니다. 공자는 벼슬자리를 얻기 위해서 주유천하<span class='hanja'>周遊天下</span>하느라 그가 앉은 방석이 따스할 새가 없고(<span class='hanja'>不暇暖</span>), 묵자의 굴뚝(<span class='hanja'>墨突</span>)은 검댕이 앉을 새가 없다(<span class='hanja'>不得黔</span>)고 합니다. 아궁이에 불 때서 밥을 하지 못할 정도로 궁핍하다는 뜻입니다.",
+        "세상의 혼란을 바로잡으려면 먼저 그 원인을 알아야 한다(<span class='phrase'><span class='hanja'>必知亂之所自起</span></span>). 그 원인을 밝힌 다음에라야 능히 그것을 고칠 수 있다(<span class='phrase'><span class='hanja'>能治之</span></span>)는 것입니다. ",
+        "백성들에게는 세 가지 우환이 있다고 진단합니다(<span class='phrase'><span class='hanja'>民有三患</span></span>). ",
+        "굶주린 자가 먹지 못하고(<span class='phrase'><span class='hanja'>飢者不得食</span></span>), ",
+        "추위에 떠는 자가 입지 못하며(<span class='phrase'><span class='hanja'>寒者不得衣</span></span>), ",
+        "일하는 자가 쉬지 못한다(<span class='phrase'><span class='hanja'>勞者不得息</span></span>)고 진단했습니다. ",
+        "세상 사람들은 누구도 서로 사랑하지 않으며(<span class='phrase'><span class='hanja'>天下之人</span> <span class='hanja'>皆不相愛</span></span>), ",
+        "강자는 약자를 억압하고(<span class='phrase'><span class='hanja'>强必執弱</span></span>), ",
+        "다수는 소수자를 겁박하고(<span class='phrase'><span class='hanja'>衆必劫寡</span></span>), ",
+        "부자는 가난한 사람을 업신여기고(<span class='phrase'><span class='hanja'>富必侮貧</span></span>), ",
+        "귀족은 천한 사람에게 오만하고(<span class='phrase'><span class='hanja'>貴必敖賤</span></span>), ",
+        "간사한 사람은 어리석은 사람을 속인다(<span class='phrase'><span class='hanja'>詐必欺愚</span></span>). ",
+        "이러한 현실의 궁극적 원인은 바로 서로 사랑하지 않기(<span class='phrase'><span class='hanja'>不相愛</span></span>) 때문이라는 것",
+        "차별 없이 사랑할 때 평화로워진다는 것입니다(<span class='phrase'><span class='hanja'>兼相愛則治</span></span>). ",
+        "<span class='phrase'><span class='hanja'>若使天下</span> <span class='hanja'>兼相愛</span> <span class='hanja'>愛人若愛其身</span> <span class='hanja'>猶有不孝者乎</span></span> –「겸애」만약 천하 사람들로 하여금 서로 사랑하게 하여 <span class='phrase'>‘애인약애기신’<span class='hanja'>愛人若愛其身</span></span> 한다면 어찌 불효가 있겠는가라는 뜻입니다.",
+        "묵자는 천하를 이롭게 하려면 <span class='phrase'>겸상애<span class='hanja'>兼相愛</span> 교상리<span class='hanja'>交相利</span></span>의 법으로 바꾸어야 한다고 주장합니다(<span class='phrase'><span class='hanja'>兼相愛</span> <span class='hanja'>交相利之法</span> <span class='hanja'>易之</span></span>). ‘교상리’는 오늘날 현안이 되어 있는 동반성장과 같은 의미입니다.",
+        "한 사람을 죽이면 불의한 짓이라고 한다(<span class='phrase'><span class='hanja'>殺一人</span> <span class='hanja'>謂之不義</span></span>). ",
+        "그러나 이제 크게 군사를 일으켜 다른 나라를 공격하면 그것이 잘못이란 것을 알지 못하고(<span class='phrase'><span class='hanja'>今至大爲攻國</span> <span class='hanja'>則弗知非</span></span>), ",
+        "그걸 추종하고 예찬하면서 의롭다고 한다(<span class='phrase'><span class='hanja'>從而譽之</span> <span class='hanja'>謂之義</span></span>). ",
+        "이를 어찌 의와 불의를 분별한다고 할 수 있겠느냐(<span class='phrase'><span class='hanja'>此可謂知義與不義之別乎</span></span>)",
+        "『천자문』<span class='phrase'>에 묵비사염<span class='hanja'>墨悲絲染</span></span>이란 말이 있습니다. 묵자가 실이 물드는 것을 보고 슬퍼한다는 뜻입니다. ",
+        "묵자가 우려하는 것은 실만 물드는 것이 아니라 나라도 물든다는 것입니다(<span class='phrase'><span class='hanja'>非獨染絲然也</span> <span class='hanja'>國亦有染</span></span>). ",
+        "올바르게 물들어야 올바른 도리를 행하게 됩니다(<span class='phrase'><span class='hanja'>行理生於染當</span></span>).",
+    ],
+    "11": [
+        "‘<span class='phrase'>영신탁<span class='hanja'>寧信度</span> 무자신<span class='hanja'>無自信</span></span>’, 탁은 믿을 수 있지만 내 발을 어떻게 믿을 수 있겠느냐는 바보 같은 대답입니다.",
+        "예열<span class='hanja'>兒說</span>은 <span class='phrase'>백마비마<span class='hanja'>白馬非馬</span></span>로 유명한 논객이었습니다. 백마는 말이 아니라는 명제를 이렇게 입증했습니다. 전국의 백마를 다 불러 모았습니다. 백마들이 다 모였습니다. 그런 연후에 시골에 남아 있는 말을 가리키며 이것은 무엇인가라고 묻습니다. 대답은 당연히 “말입니다”였습니다. 그러자 ‘백마는 말이 아닌 것’이 됩니다.",
+        "<span class='phrase'>수주대토<span class='hanja'>守株待兎</span></span>의 일화가 그것입니다. 송나라의 농부가 밭을 갈고 있는데, 급하게 달려오던 토끼가 나무 그루터기에 부딪혀 <span class='phrase'>절경이사<span class='hanja'>絶頸而死</span></span>, 목이 부러져서 죽었습니다. 그 이튿날 농부는 밭일은 하지 않고 또 토끼가 와서 죽기만을 기다렸습니다. ",
+        "“형정을 만들어 민<span class='hanja'>民</span>이 형정의 법조문만 마음에 두게 되었으니 무엇 때문에 민이 귀족을 존중하겠는가?”(<span class='phrase'><span class='hanja'>民在鼎矣</span> <span class='hanja'>何以尊貴</span></span>)",
+        "“항상 강한 나라도 없고 항상 약한 나라도 없다. 법을 받드는 것이 강하면 나라가 강해지고, 법을 받드는 것이 약하면 나라가 약해진다.”(<span class='phrase'><span class='hanja'>國無常强</span> <span class='hanja'>無常弱</span> <span class='hanja'>奉法者强</span> <span class='hanja'>則國强</span> <span class='hanja'>奉法者弱</span> <span class='hanja'>則國弱</span></span>)",
+        "잘못〔<span class='hanja'>過</span>〕을 처벌〔<span class='hanja'>刑</span>〕함에 있어서는 대신도 피할 수 없으며, 선행〔<span class='hanja'>善</span>〕을 상<span class='hanja'>賞</span> 줌에 있어서 필부도 빠트려선 안 된다. 대신이라고 해서 처벌을 면제하고 필부라고 해서 상을 주지 않으면 안 된다. 법은 엄정하고 공평무사해야 한다.",
+        "윗사람의 잘못을 바로잡고(<span class='phrase'><span class='hanja'>矯上之失</span></span>), ",
+        "아랫사람의 거짓, 속임수를 꾸짖으며(<span class='phrase'><span class='hanja'>詰下之邪</span></span>), ",
+        "난을 다스리고 오류를 결단하고(<span class='phrase'><span class='hanja'>治亂決繆</span></span>), ",
+        "열외를 인정하지 않고 공평하게 바로잡고(<span class='phrase'><span class='hanja'>絀羨齊非</span></span>) ",
+        "백성들이 따라야 할 준칙을 하나로 통일하는 데는 법보다 나은 것이 없다(<span class='phrase'><span class='hanja'>一民之軌</span> <span class='hanja'>莫如法</span></span>). ",
+        "관리들을 독려하고 백성들에게 위엄을 보이고(<span class='phrase'><span class='hanja'>厲官威民</span></span>), ",
+        "방탕하고 위태로운 것을 물리치고 거짓된 것을 중지시키는 데는 형<span class='hanja'>刑</span>보다 나은 것이 없다(<span class='phrase'><span class='hanja'>退淫殆</span> <span class='hanja'>止詐僞</span> <span class='hanja'>莫如刑</span></span>). ",
+        "형이 엄중하면 감히 귀족이 천민을 업신여길 수 없고(<span class='phrase'><span class='hanja'>刑重則不敢以貴易賤</span></span>), ",
+        "법이 자세하면 임금이 존중되고 침해당하지 않는다(<span class='phrase'><span class='hanja'>法審則上尊而不侵</span></span>). ",
+        "임금이 존중되고 침해당하지 않으면 임금이 강해지고 나라의 핵심을 장악할 수가 있다(<span class='phrase'><span class='hanja'>主强而守要</span></span>). ",
+        "그렇기 때문에 선왕들이 이러한 것을 귀하게 여겨 전한 것이다(<span class='phrase'><span class='hanja'>故先王貴之而傳之</span></span>).",
+        "임금이 법을 놓아 버리고(<span class='phrase'><span class='hanja'>人主釋法</span></span>) 법을 사사롭게 쓰면(<span class='phrase'><span class='hanja'>用私</span></span>) 상하 분별이 어려워지고(<span class='phrase'><span class='hanja'>上下不別</span></span>) 나라의 질서가 문란해진다. -「유도」<span class='hanja'>有度</span>",
+        "‘<span class='phrase'>예불하서인<span class='hanja'>禮不下庶人</span> 형불상대부<span class='hanja'>刑不上大夫</span></span>’는 서주<span class='hanja'>西周</span> 시대 이래 널리 통용된 형 집행 원칙입니다. 예<span class='hanja'>禮</span>는 서민들에게 내려가지 않고, 반대로 형<span class='hanja'>刑</span>은 대부에게 올라가지 않는다는 뜻입니다. 대부 이상의 귀족 계급은 예로 다스리고 서민들은 형으로 다스린다는 뜻입니다.",
+        "법으로써 도를 삼는 것(<span class='phrase'><span class='hanja'>法之爲道</span></span>)은 처음에는 괴롭지만 길게 본다면 이롭다는 것입니다. ",
+        "인으로써 하는 정치(<span class='phrase'><span class='hanja'>仁之爲道</span></span>)는 처음에는 즐겁지만(<span class='phrase'><span class='hanja'>初樂</span></span>) 나중에는 궁하게 된다는 것입니다. ",
+        "법가의 엄벌주의는 형벌로써 형벌을 없애는(<span class='phrase'><span class='hanja'>以刑去刑</span></span>) 논리입니다. ",
+        "신하가 군주의 이목을 가리는 것(<span class='phrase'><span class='hanja'>臣閉其主</span></span>), ",
+        "신하가 국가의 재정을 장악하는 것(<span class='phrase'><span class='hanja'>臣制財利</span></span>),",
+        "군주의 허락 없이 신하가 마음대로 명령을 내리는 것(<span class='phrase'><span class='hanja'>臣擅行令</span></span>),",
+        "신하가 사사로이 은혜를 베푸는 것(<span class='phrase'><span class='hanja'>臣得行義</span></span>), ",
+        "신하가 파당을 조직하는 것(<span class='phrase'><span class='hanja'>臣得樹人</span></span>)",
+        "상앙의 일화 중에 <span class='phrase'>사목지신<span class='hanja'>徙木之信</span></span>이 있습니다. 당시 진나라에서는 나라의 법령을 백성들이 신뢰하지 않았습니다. 남문 밖에다가 3장<span class='hanja'>丈</span>짜리 막대기를 하나 세워 놓고 이 막대기를 북문으로 옮기면 10금<span class='hanja'>金</span>을 준다고 방을 붙였지만 아무도 응하는 사람이 없었습니다. 여러 번 상금을 올려 나중에는 100금으로 올렸습니다. 어떤 사람이 힘든 일도 아니고 해서 속는 셈치고 옮겼습니다. 약속대로 100금을 하사합니다. 그 이후로 사람들이 국법을 신뢰하게 되었다는 일화입니다.",
+        "태산은 작은 흙덩이라도 마다하지 않음으로써 그 큼을 이룰 수 있고(<span class='phrase'><span class='hanja'>泰山不辭讓土</span> <span class='hanja'>故能成其大</span></span>),",
+        "큰 강과 바다는 작은 물줄기라도 가리지 않음으로써 그 깊음을 이룰 수 있는 법입니다(<span class='phrase'><span class='hanja'>河海不擇細流</span> <span class='hanja'>故能就其深</span></span>).",
+        "<span class='phrase'>교사불여졸성<span class='hanja'>巧詐不如拙誠</span></span>. 한비자를 잘 나타내는 한비자 자신의 글이기도 합니다. 교묘한 거짓〔<span class='hanja'>巧詐</span>〕은 졸렬한 성실〔<span class='hanja'>拙誠</span>〕에 미치지 못한다는 것입니다. 아무리 화려한 언설과 치장으로 꾸민다고 하더라도 어리석고 졸렬하지만 성실하고 진정성 있는 사람을 이기지 못한다는 것입니다.",
+        "자어는 공자가 임금께 귀하게 여겨질까봐(<span class='phrase'><span class='hanja'>恐孔子貴於君也</span></span>) 태재에게 충고합니다. “임금께서 공자를 한번 보시고 나면 임금께서는 당신을 조슬<span class='hanja'>蚤蝨</span>로밖에 보지 않을 것입니다.” 태재는 그 말을 듣고 다시는 공자를 소개하지 않았다는 예화입니다.",
+    ],
+    "18": [
+        "<span class='phrase'>초만영어<span class='hanja'>草滿囹圄</span></span>라는 말이 있습니다. 감옥에 풀만 가득하다는 뜻입니다. 태평성세를 그렇게 불렀습니다.",
+    ],
+    "19": [
+        "청나라 때의 유희재<span class='hanja'>劉熙載</span>는 『서개』<span class='hanja'>書槪</span>에서 “<span class='phrase'><span class='hanja'>書如也</span>. <span class='hanja'>如其學</span>, <span class='hanja'>如其才</span>, <span class='hanja'>如其志</span>, <span class='hanja'>總之曰</span>, <span class='hanja'>如其人而已</span></span>”라고 합니다.",
+        "‘<span class='phrase'>서권기<span class='hanja'>書卷氣</span> 문자향<span class='hanja'>文字香</span></span>’이라고 합니다. 그 사람의 학식이 글에 담긴다고 합니다. 그리고 그 사람의 재<span class='hanja'>才</span>, 그 사람의 지<span class='hanja'>志</span>, 사상과 뜻이 글에 담깁니다. ",
+        "<span class='phrase'>총지왈<span class='hanja'>總之曰</span></span>, 최종적으로 그 ‘사람과 같다’ 즉 글씨와 사람이 같다고 하는 것입니다.",
+        "<span class='phrase'><span class='hanja'>北岳無心五千年</span> 북악무심오천년 <span class='hanja'>漢水有情七百里</span> 한수유정칠백리</span>. “북악은 5천 년 동안 무심하고, 한수는 유정하게 700리를 흐른다.”",
+    ],
+    "20": [
+        "‘<span class='phrase'>대인춘풍<span class='hanja'>待人春風</span> 지기추상<span class='hanja'>持己秋霜</span></span>’입니다. 남을 대하기는 춘풍처럼 관대하게 하고, 반면에 자기를 갖기는 추상같이 엄격하게 해야 한다는 뜻입니다.",
+    ],
+    "21": [
+        "범중엄<span class='hanja'>范仲淹</span>의 「악양루기」<span class='hanja'>岳陽樓記</span>에 ‘<span class='phrase'>불이물희<span class='hanja'>不以物喜</span> 불이기비<span class='hanja'>不以己悲</span></span>’라는 명구가 있습니다. “물<span class='hanja'>物</span>로써 기뻐하지 않으며 자기〔<span class='hanja'>己</span>〕 때문에 슬퍼하지 않는다”는 것입니다.",
+    ],
+    "23": [
+        "양명학의 핵심은 <span class='phrase'>‘심즉리’<span class='hanja'>心卽理</span></span>입니다. “마음이 진리”라는 것입니다. ",
+        "주자학에서는 <span class='phrase'>성즉리<span class='hanja'>性卽理</span></span>였습니다. 성<span class='hanja'>性</span>이라는 것은 하늘로부터 받는 것입니다. 그러나 심<span class='hanja'>心</span>은 객관적으로 주어진 천명<span class='hanja'>天命</span>, 천성<span class='hanja'>天性</span>, 천리<span class='hanja'>天理</span>가 아니라 인간의 주체적인 실천이 진리를 담보한다는 주장입니다. ",
+        "양명학의 3강령은 <span class='phrase'>심즉리<span class='hanja'>心卽理</span></span>, <span class='phrase'>치양지<span class='hanja'>致良知</span></span>, <span class='phrase'>지행합일<span class='hanja'>知行合一</span></span>입니다. ",
+        "치양지는 <span class='phrase'>양지<span class='hanja'>良知</span>를 다한다</span>는 뜻입니다. 양명학에서는 심<span class='hanja'>心</span>을 양지로 보고 그 자체를 선량한 것으로 승인합니다. ",
+    ],
+    "25": [
+        "첫 번째는 <span class='phrase'>엽락<span class='hanja'>葉落</span></span>입니다. 그림에서 보듯이 잎사귀를 떨어뜨려야 합니다. 잎사귀는 한마디로 ‘환상과 거품’입니다. 엽락이란 바로 ‘환상과 거품’을 청산하는 것입니다. ",
+        "『논어』의 불혹<span class='hanja'>不惑</span>과 같은 뜻입니다. 우리는 『논어』의 <span class='phrase'>사십불혹<span class='hanja'>四十不惑</span></span>을 나이 마흔이 되면 의혹이 없어진다는 뜻으로 읽습니다. 올바른 독법이 못 됩니다. 나이 마흔에 모든 의혹이 다 없어질 만큼 현명한 사람은 없습니다. 이 경우의 혹<span class='hanja'>惑</span>은 의혹<span class='hanja'>疑惑</span>이 아니라 미혹<span class='hanja'>迷惑</span>이고 환상<span class='hanja'>幻想</span>입니다. 가망 없는 환상을 더 이상 갖지 않는 것이 불혹입니다. ",
+        "다음이 체로<span class='hanja'>體露</span>입니다. 그림에서 보듯이 엽락 후의 나무는 나목<span class='hanja'>裸木</span>입니다. 잎사귀에 가려져 있던 뼈대가 훤히 드러납니다. 『운문록』<span class='hanja'>雲門錄</span>의 <span class='phrase'>체로금풍<span class='hanja'>體露金風</span></span>입니다. 칼바람에 뼈대가 드러납니다. 나무를 지탱하는 구조가 드러납니다. 우리가 해야 하는 일이 바로 구조와 뼈대를 직시하는 일입니다.",
+        "마지막으로 <span class='phrase'>분본<span class='hanja'>糞本</span></span>입니다. 분<span class='hanja'>糞</span>은 ‘거름’입니다. 분본이란 뿌리〔<span class='hanja'>本</span>〕를 거름〔<span class='hanja'>糞</span>〕하는 것입니다. 그림이 보여줍니다. 낙엽이 뿌리를 따뜻하게 덮고 있습니다. 이 경우 중요한 것은 뿌리가 곧 ‘사람’이라는 사실입니다. ",
+    ]
+};
+
+</script>
+
+<script>
+
+function sortByChapter() {
+    var $items = $('.ui.list > .item').toArray();
+    $items = _.sortBy($items, function(el) {
+        var classNames = $(el).attr('class');
+        var itemIndex = classNames.replace(/.*item-([0-9]+).*/, "$1");
+        return parseInt(itemIndex);
+    });
+    $('.ui.list').append($items).removeClass('sorted');
+}
+
+function renderActivity(obj) {
+    var $item = $('<div class="item" />');
+    if (obj.type === 'header1') {
+        $item.addClass('header header1').append($('<h1 class="ui header" />').text(obj.text));
+    }
+    else if (obj.type === 'header2') {
+        $item.addClass('header header2').append($('<h2 class="ui header" />').text(obj.text));
+    }
+    else if (obj.type === 'header3') {
+        $item.addClass('header header3').append($('<h3 class="ui header" />').text(obj.text));
+    }
+    else if (obj.type === 'activity') {
+        /*
+        <div class="item">
+            <span class="head date">
+                <span class="year-part">1979년</span> <span class="month-part">11월</span> <span class="date-part">5일</span>
+            </span>
+            <span class="description">콰이드이아잠 대학이 있는 이슬라마바드 외교 단지의 이란 대사관은 지하드를 촉구하는 현수막으로 둘러쳐짐</span></div>
+        */
+        //
+        var $head = $('<span class="head" />').addClass(obj.head.type);
+        //{
+        //    "head": {
+        //        "_text": " 1945년 2월 14일", "type": "date",
+        //        "components": [
+        //            {"text": "1945년", "type": "year-part"},
+        //            {"text": "2월", "type": "month-part"},
+        //            {"text": "14일", "type": "date-part"}
+        //        ]
+        //    },
+        //    "head": {
+        //        "_text": "18세기 이후", "type": "period period-from period-century",
+        //        "components": [
+        //            {"text": "18세기 ", "type": "text"},
+        //            {"text": "이후", "type": "period-suffix"}
+        //        ]
+        //    },
+        //}
+        var headNodes = [];
+        for (var i = 0 ; i < obj.head.components.length; i++) {
+            var component = obj.head.components[i];
+            if (component.type === 'text') {
+                headNodes.push( document.createTextNode(component.text) );
+            } else {
+                if (prevComponent && prevComponent.type !== 'text') { headNodes.push( document.createTextNode(' ') ); }
+                var $el =  $('<span />').text(component.text);
+                if (component.type !== 'object') {
+                    $el.addClass(component.type) ;
+                }
+                headNodes.push($el);
+            }
+        }
+        $head.append(headNodes);
+        //
+        var $desc = $('<span class="description" />');
+        var descNodes = [];
+        for (var i = 0; i < obj.description.components.length; i++) {
+            var component = obj.description.components[i];
+            var prevComponent = obj.description.components[i-1];
+
+            if (component.type === 'text') {
+                descNodes.push( document.createTextNode(component.text) );
+            } else {
+                if (prevComponent && prevComponent.type !== 'text') { headNodes.push( document.createTextNode(' ') ); }
+                var $el =  $('<span />').text(component.text);
+                if (component.type !== 'object') {
+                    $el.addClass(component.type) ;
+                }
+                descNodes.push($el);
+            }
+        }
+        $desc.append(descNodes);
+        //
+        $item.append($head, $desc);
+    } else {
+        $item.html(obj);
+    }
+
+    return $item;
+}
+
+function render(activitiesData) {
+    // $render
+    var $list = $('.ui.list').empty();
+    for (var i = 0; i < activitiesData.length; i++) {
+        var activityObj = activitiesData[i];
+        renderActivity(activityObj).appendTo($list);
+    }
+
+    // assign item index
+    $('.ui.list > .item').each(function(i, el) {
+        $(el).addClass("item-" + i);
+    });
+
+    // copy class to parent
+    $('.item > .head').each(function(i, el) {
+        var $el = $(el);
+        var classNames = $el.attr('class').split(' ');
+            classNames = _.without(classNames, 'head').join(' ');
+        $el.parent().addClass(classNames);
+    });
+
+}
+function _getTotalData(data) {
+    var totalData = [];
+    var keys = _.keys(data);
+    for(var i = 0; i < keys.length; i++) {
+        totalData = totalData.concat( data[i] );
+    }
+    totalData = totalData.filter(_.identity);
+    return totalData;
+}
+function renderForIndex(index) {
+    if (index === 0) {
+        var totalData = _getTotalData(data);
+        render(totalData);
+    }
+    else {
+        render(data[index]);
+    }
+
+    // set title
+    var $dropdown = $('.selection.dropdown');
+    var title = $dropdown.find('.menu > .item[data-value="' + index + '"]').text();
+    $dropdown.find('.default.text').text(title);
+}
+function renderForTitle(text) {
+    var keys = _.keys(data);
+    if (text === '0') {
+        renderForIndex(0);
+    }
+    else {
+        for(var i = 0; i < keys.length; i++) {
+            if (keys[i] == text) {
+                renderForIndex(keys[i]);
+                return;
+            }
+        }
+        var $list = $('.ui.list').empty();
+    }
+}
+
+function bindMenuClick() {
+    $('.ui.menu > a.item').on('click', function(ev) {
+        ev.preventDefault();
+        var $el = $(ev.target);
+        if ($el.hasClass('disabled')) {
+            return;
+        }
+        if ($el.hasClass('active')) {
+            return;
+        }
+        //
+        $('.ui.menu > .item.active').removeClass('active');
+        $el.addClass('active');
+    });
+}
+
+function bindDropDown() {
+    var $dropdown = $('.selection.dropdown');
+
+    var keys = _.keys(data);
+    $dropdown.find('> .menu .item').each(function(i, el) {
+        var itemText = $(el).text().trim();
+        for (var j = 0; j < keys.length; j++) {
+            if ( itemText === keys[j].trim() ) {
+                $(el).removeClass('disabled');
+                break;
+            }
+        }
+    });
+    
+    $dropdown.dropdown({
+        action: function(text, value) {
+            renderForTitle(value);
+            //
+            $dropdown.find('.default.text').text(text);
+            $dropdown.dropdown('hide');
+        },
+    });
+}
+
+// main
+$(function() {
+    // render
+    renderForIndex(4)
+
+    bindMenuClick();
+    bindDropDown();
+});
+    </script>
+</head>
+<body>
+<div class="ui container">
+
+    <div class="ui two item menu pointing">
+        <a href="#" class="chapter item active">챕터</a>
+        <a href="#" class="book item disabled">책</a>
+    </div>
+
+<div class="ui fluid selection dropdown">
+    <input type="hidden" name="part">
+    <i class="dropdown icon"></i>
+    <div class="default text">4장</div>
+    <div class="menu" style="max-height: 300px;">
+        <div class="item" data-value="0">전체</div>
+        <!--div class="item" data-value>1부 고전에서 읽는 세계 인식</div-->
+        <div class="item" data-value="1">1장 - 가장 먼 여행</div>
+        <div class="item" data-value="2">2장 - 사실과 진실</div>
+        <div class="item" data-value="3">3장 - 방랑하는 예술가</div>
+        <div class="item" data-value="4">4장 - 손때 묻은 그릇</div>
+        <div class="item" data-value="5">5장 - 톨레랑스에서 노마디즘으로</div>
+        <div class="item" data-value="6">6장 - 군자는 본래 궁한 법이라네</div>
+        <div class="item" data-value="7">7장 - 점은 선이 되지 못하고</div>
+        <div class="item" data-value="8">8장 - 잠들지 않는 강물</div>
+        <div class="item" data-value="9">9장 - 양복과 재봉틀</div>
+        <div class="item" data-value="10">10장 - 이웃을 내 몸같이</div>
+        <div class="item" data-value="11">11장 - 어제의 토끼를 기다리며</div>
+        <!--div class="item" data-value>2부 인간 이해와 자기 성찰</div-->
+        <div class="item" data-value="12">12장 - 푸른 보리밭</div>
+        <div class="item" data-value="13">13장 - 사일이와 공일이</div>
+        <div class="item" data-value="14">14장 - 비극미</div>
+        <div class="item" data-value="15">15장 - 위악 과 위선</div>
+        <div class="item" data-value="16">16장 - 관계와 인식</div>
+        <div class="item" data-value="17">17장 - 비와 우산</div>
+        <div class="item" data-value="18">18장 - 증오의 대상</div>
+        <div class="item" data-value="19">19장 - 글씨와 사람</div>
+        <div class="item" data-value="20">20장 - 우엘바와 바라나시</div>
+        <div class="item" data-value="21">21장 - 상품과 자본</div>
+        <div class="item" data-value="22">22장 - 피라미드의 해체</div>
+        <div class="item" data-value="23">23장 - 떨리는 지남철</div>
+        <div class="item" data-value="24">24장 - 사람의 얼굴</div>
+        <div class="item" data-value="25">25장 - 희망의 언어 석과불식</div>
+    </div>
+</div>
+
+<div class="ui list">
+</div>
+
+</div>
+
+</body>
+</html>
