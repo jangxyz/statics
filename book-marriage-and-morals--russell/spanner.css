@@ -1,0 +1,43 @@
+
+.spanner {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.spanner-person {
+    color: rgb(55,75, 148);
+}
+
+.spanner-book {
+}
+.spanner-book-translated {
+    font-size: 0.8rem;
+}
+
+/*
+ * spanner-dates
+ */
+
+.spanner-dates {
+    color: #333;
+}
+
+.spanner-dates-age {
+    font-size: 0.75rem;
+}
+.spanner-dates-age:before {
+    content: "(";
+}
+.spanner-dates-age:after {
+    content: ")";
+}
+
+
+.spanner-dates-description {
+    display: block;
+    margin-left: 100px;
+    margin-top: -17px;
+
+    color: #666;
+}
+

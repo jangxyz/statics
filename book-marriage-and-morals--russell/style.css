@@ -1,0 +1,86 @@
+
+/*
+ * container
+ */
+.container article.content > .summary,
+.container article.content > .chronology {
+    display: none;
+}
+.container .header > .summary,
+.container .header > .chronology {
+    display: none;
+}
+
+/*
+ * chronolgy
+ */
+
+.container.chronology-container .header > .chronology,
+.container.chronology-container article.content > .chronology {
+    display: block;
+}
+
+.header > .chronology {
+    position: relative;
+}
+
+.header .sort-order {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+ul {
+}
+
+li {
+    font-size: 0.90rem;
+}
+li:before {
+    content: "" !important;
+}
+
+li p:not(:last-of-type) {
+}
+li p:nth-child(2) {
+    display: none;
+
+    font-size: 0.85rem;
+    min-height: 20px;
+    margin-bottom: 17px;
+}
+li p.sub-description {
+    margin-left: 100px;
+}
+
+.spanner-dates-dates {
+    display: inline-block;
+    width: 100px;
+}
+
+/*
+ * summary
+ */
+
+.container.summary-container .header > .summary {
+    display: block;
+}
+.container.summary-container article.content > .summary {
+    display: block;
+}
+
+h2 {
+    font-size: 1.28rem;
+}
+
+.summary p {
+    font-size: 0.9rem;
+    line-height: 1.5rem;
+    margin-bottom: 2px;
+}
+
+.summary h2,
+.summary p {
+    display: none;
+}
+
