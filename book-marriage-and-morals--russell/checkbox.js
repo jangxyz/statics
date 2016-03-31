@@ -1,3 +1,10 @@
+var checkedModel = {
+    Life       : true,
+    Career     : true,
+    Publication: true,
+    Honor      : true,
+    Activity   : true,
+};
 
 function checkCategory(name, isChecked) {
     checkedModel[name] = isChecked;
@@ -5,7 +12,7 @@ function checkCategory(name, isChecked) {
 }
 
 function bindCheckbox() {
-    $('.list .child.checkbox').checkbox({
+    $('.list .checkbox').checkbox({
         // Fire on load to set parent value
         fireOnInit : true,
         // Change parent state on each child checkbox change
@@ -22,11 +29,6 @@ function bindCheckbox() {
                 if( $(this).checkbox('is checked') ) { allUnchecked = false; }
                 else                                 { allChecked   = false; }
             });
-
-            // set parent checkbox state, but dont trigger its onChange callback
-            if (allChecked)       { $parentCheckbox.checkbox('set checked'); }
-            else if(allUnchecked) { $parentCheckbox.checkbox('set unchecked'); }
-            else                  { $parentCheckbox.checkbox('set indeterminate'); }
         },
         onChecked: function() {
             var isChecked = true;
@@ -38,22 +40,9 @@ function bindCheckbox() {
             var name = $(this).attr('name');
             checkCategory(name, isChecked);
         },
-
-    });
-    // master checkbox
-    $('.ui.master.checkbox').checkbox({
-        // check all children
-        onChecked: function() {
-            var $childCheckbox  = $(this).closest('.item').find('.child-checkbox.list').find('.checkbox');
-                $childCheckbox.checkbox('check');
-        },
-        // uncheck all children
-        onUnchecked: function() {
-            var $childCheckbox  = $(this).closest('.item').find('.child-checkbox.list').find('.checkbox');
-                $childCheckbox.checkbox('uncheck');
-        }
     });
 }
+
 
 $(function() {
     //bindCheckbox();

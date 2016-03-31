@@ -1,4 +1,14 @@
 
+
+h2 {
+    margin-left: 1.25rem;
+    border-bottom: 1px solid black;
+}
+
+article.content {
+    padding: 20px 0;
+}
+
 /*
  * container
  */
@@ -12,7 +22,7 @@
 }
 
 /*
- * chronolgy
+ * chronology
  */
 
 .container.chronology-container .header > .chronology,
@@ -30,6 +40,12 @@
     right: 10px;
 }
 
+/* checkbox */
+.chronology .ui.horizontal.list {
+    font-size: 0.8rem;
+    margin-right: 160px;
+}
+
 ul {
 }
 
@@ -38,6 +54,10 @@ li {
 }
 li:before {
     content: "" !important;
+}
+
+li:hover {
+    background-color: whitesmoke;
 }
 
 li p:not(:last-of-type) {
@@ -53,10 +73,47 @@ li p.sub-description {
     margin-left: 100px;
 }
 
+.chronology li:hover .spanner-dates-description {
+    color: black;
+}
+
 .spanner-dates-dates {
     display: inline-block;
     width: 100px;
 }
+
+
+.chronology .detail.button {
+    position: absolute;
+    margin-top: -17px;
+    right: 0;
+}
+
+/* tag */
+.chronology .tag {
+    float: right;
+    font-size: 0.7rem;
+    color: #ddd;
+    /*margin-right: 30px;*/
+}
+.chronology li:hover .tag {
+    color: #aaa;
+}
+
+
+.chronology .tag:before {
+    content: "#";
+}
+
+.chronology.sort-by-subject .tag {
+    display: none;
+}
+.chronology.sort-by-time li {
+    margin-bottom: 6px;
+}
+
+
+
 
 /*
  * summary
@@ -83,4 +140,3 @@ h2 {
 .summary p {
     display: none;
 }
-
