@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+  <script src="movie_list.js"></script>
+</head>
+<body>
+
+  <ul id="movies" class="ui link cards" style="margin: 5px;">
+  </ul>
+
+<script type="text/javascript">
+
+  var $movies = $('#movies');
+  movieList.forEach(function(movieData, i) {
+    $(`
+        <li class="card">
+
+          <a href="${movieData.title[0].link}" target="_blank" class="image">
+              <img src="${movieData.thumbnail[0].content}">
+          </a>
+          <div class="content">
+            <div class="header">
+                ${movieData.title[0].content}
+                (${movieData.year[0].content})
+                <span class="meta" style="font-size: 1rem; white-space: nowrap;">
+                    ${movieData.eng_title[0].content}
+                </span>
+            </div>
+            <div class="meta">
+                <span class="right floated">
+                  <span class="genre">
+                  ${movieData.genre.map(g => g.content).join(' / ')}
+                  </span>
+                  |
+                  <span class="runtime">
+                    ${movieData.open_info.map(x => x.content).find(x => x.match(/[0-9]+분/))}
+                  </span>
+                </span>
+            </div>
+            <div class="description" style="max-height: 100px; text-overflow: ellipsis; overflow: hidden;">
+              <p>
+                  감독 ${movieData.director.map(x => x.content).join(', ')}
+                  <br>
+                  ${movieData.actor.map(x => x.content).join(', ')}
+              </p>          
+              <p title="${movieData.story[0].content}">
+                ${movieData.story[0].content}
+              </p>
+            </div>
+          </div>
+          <div class="extra content">
+            <span class="right floated">
+                <div class="ui star rating" data-rating="${parseInt(parseFloat(movieData.grades[0].content)/2)}" data-max-rating="5">${movieData.grades[0].content}</div>
+            </span>
+            <span>
+${numeral(movieData.audience[0].content).format('0,0')} 관객
+            </span>
+          </div>
+      </li>`).appendTo($movies);
+  });
+
+    
+//    $('.star.rating').rating({
+//        interactive: false,
+//    });
+
+</script>
+</body>
+</html>
